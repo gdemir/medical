@@ -16,3 +16,9 @@
 
 # Ignore .ok file
 *.ok
+
+# Ignore test
+/test
+
+# Ignore migrate
+/db/migrate/*
