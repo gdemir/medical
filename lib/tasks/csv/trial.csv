@@ -1,0 +1,6 @@
+id,trial_type_id,name,min_range,max_range,units
+1,1,Total Cholestrol,11,15,mg/dl
+2,1,Triglycerides,12,14,gm/dL
+3,1,LDL Cholesterol,12,18,mg/dl
+4,1,VLDL,16,28,mg/dl
+5,1,HDL Cholesterol,12,20,mg/dl

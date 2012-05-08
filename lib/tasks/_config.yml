@@ -1,0 +1,64 @@
+dirs: [admin, home]
+tables:
+   admin:
+      first_name: string
+      last_name: string
+      password: string
+      status: integer
+      image_url: string
+   patient:
+      tc: string
+      file_no: integer
+      first_name: string
+      last_name: string
+      gender: boolean
+      phone: integer
+      email: string
+      image_url: string
+      birthday: date
+      birthplace: string
+      insurance: boolean
+   department:
+      name: string
+   doctor:
+      department_id: integer
+      first_name: string
+      last_name: string
+   consult:
+      patient_id: integer
+      doctor_id: integer
+      date: datetime
+      payment: boolean       # ödeme yapılırsa "true"
+   invoice:
+      consult_id: integer
+      product_id: integer    # drug_id veya trial_id
+      product_type: boolean
+      price: integer
+   trial_history:
+      trial_request_id: integer
+      request_admin_id: integer
+      reply_admin_id: integer
+   trial_request:
+      consult_id: integer
+      trial_type_id: integer
+      state: boolean
+   trial_result:
+      trial_request_id: integer
+      sequence: integer
+      trial_id: integer
+      min_range: integer
+      max_range: integer
+      result: integer
+   trial:
+      trial_type_id: integer
+      name: string
+      min_range: integer  # default değer için
+      max_range: integer  # default değer için
+      units: string
+   trial_type:
+      name: string
+      price: integer      # default değer için
+   drug:
+     name: string
+     content: text
+     price: integer       # default değer için

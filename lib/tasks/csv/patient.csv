@@ -1,0 +1,4 @@
+id,tc,file_no,first_name,last_name,gender,phone,birthday,birthplace,image_url
+1,12345678910,39001,Abdul Aziz,Shams,true,3335005065,1990-01-12,foo,/default.png
+2,12345678911,39002,Jovin Jomea,Shine,true,3335251318,1990-01-12,bar,/default.png
+3,12345678912,39003,Lose,Daniel,false,3336749884,1990-01-12,baz,/default.png
