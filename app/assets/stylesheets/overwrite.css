@@ -1,0 +1,36 @@
+body {
+    padding-top: 70px;
+}
+
+.alert {
+    border-radius: 4px 4px 4px 4px;
+    margin-bottom: 18px;
+    width: 860px;
+    padding: 6px 35px 6px 40px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.alert p {
+    text-align:center;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+}
+
+.navbar-fixed-bottom {
+    margin-bottom:0px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.scrollspy {
+    height: 200px;
+    overflow: auto;
+    position: relative;
+}
+
+.span3 .thumbnail img {
+    width: 240px;
+    height: 200px;
+}
