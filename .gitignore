@@ -19,6 +19,3 @@
 
 # Ignore test
 /test
-
-# Ignore migrate
-/db/migrate/*
