@@ -1,0 +1,28 @@
+<% if session[:patient] %>
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Ad</th>
+        <th>Soyad</th>
+        <th>Doğum Yeri</th>
+        <th>Cinsiyet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <td>
+        <div class="span1">
+          <div class="thumbnail"><img src="<%= session[:patient][:image_url] %>"/></div>
+        </div>
+      </td>
+      <td><%= session[:patient][:first_name] %></td>
+      <td><%= session[:patient][:last_name] %></td>
+      <td><%= session[:patient][:birthplace] %></td>
+      <td>
+        <span class="label label-<%= session[:patient][:gender] ? "info" : "important" %>">
+          <%= session[:patient][:gender] ? "E" : "K" %>
+        </span>
+      </td>
+    </tbody>
+  </table>
+<% end %>

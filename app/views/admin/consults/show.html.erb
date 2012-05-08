@@ -1,0 +1,136 @@
+<% if consult = Consult.find(params[:id]) %>
+  <% patient = consult.patient %>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+
+      <div class="span3">
+        <div class="thumbnail">
+          <img src="<%= patient[:image_url] %>" alt="">
+        </div>
+      </div>
+
+      <!--consult info-->
+      <div class="span9">
+        <div class="row-fluid">
+          <table class="table table-bordered">
+            <tbody>
+              <tr>
+                <th>Hasta No</th>
+                <td><%= patient[:id] %></td>
+              </tr>
+              <tr>
+                <th>Tc Kimlik No</th>
+                <td><%= patient[:tc] %></td>
+              </tr>
+              <tr>
+                <th>Ad Soyad</th>
+                <td><%= patient.full_name %></td>
+              </tr>
+              <tr>
+                <th>Dosya No</th>
+                <td><%= patient[:file_no] %></td>
+              </tr>
+              <tr>
+                <th>Son Başvuru Tarih/Saat</th>
+                <td><%= patient.last_visit_date %></td>
+              </tr>
+              <tr>
+                <th>Son Başvuru Doktor</th>
+                <td><%= patient.last_visit_doctor %></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <%= render :partial => "admin/consults/drugs" %>
+          <%= render :partial => "admin/consults/trial_types" %>
+
+          <a data-toggle="modal" class="btn btn-primary" href="#drug"><i class="icon-plus icon-white"></i>İlaç Ekle</a>
+          <a data-toggle="modal" class="btn btn-primary" href="#trial_type"><i class="icon-plus icon-white"></i>Test Tipi Ekle</a>
+
+        </div>
+      </div><!--/.consult info-->
+
+    </div>
+  </div>
+
+  <div class="span10">
+    <h3>İşlemler</h3>
+    <p>Ödeme işlemleri için <code>Ödeme</code> Hasta geçmişi için <code>Geçmiş</code> kısmına tıklayınız.</p>
+    <!-- tabbable -->
+    <div class="tabbable" style="margin-bottom: 9px;">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#1" data-toggle="tab">Ödeme</a></li>
+        <li><a href="#2" data-toggle="tab">Geçmiş</a></li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="1">
+
+          <% invoices = Invoice.find_all_by_consult_id(params[:id]) %>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Ürün</th>
+                <th>Fiyat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% invoices.each do |invoice| %>
+                <form action="/admin/invoices/update" method="post" class="">
+
+                  <tr>
+                    <% if invoice.product_type %>
+                    <td><input type="text" class="input-xlarge" value="<%= Drug.find(invoice.product_id).name %>" disabled></td>
+                    <% else %>
+                    <td><input type="text" class="input-xlarge" value="<%= TrialType.find(invoice.product_id).name %>" disabled></td>
+                    <% end %>
+                    <td><input type="text" class="input-mini" name="price" value="<%= invoice[:price] %>"></td>
+                    <td class="links">
+                      <button type="submit" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Güncelle</button>
+                      <a class="btn btn-danger" href="/admin/invoices/<%= invoice[:id] %>/destroy"
+                        onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">
+                        <i class="icon-trash icon-white"></i> Sil
+                      </a>
+                    </td>
+                  </tr>
+
+                  <input type="hidden" name="id" value="<%= invoice[:id] %>"><!-- #FIXME -->
+                </form>
+              <% end %>
+            </tbody>
+          </table>
+
+        </div>
+        <div class="tab-pane" id="2">
+
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Bölüm</th>
+                <th>Doktor</th>
+                <th>Tarih</th>
+                <th>Saat</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% Consult.find_all_by_patient_id(patient[:id]).each do |consult| %>
+                <tr>
+                  <td><%= consult.doctor.department.name %></td>
+                  <td><%= consult.doctor.full_name %></td>
+                  <td><%= consult.day %></td>
+                  <td><%= consult.hour %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div><!--/.tabbable -->
+  </div>
+
+<% else %>
+  <center>
+    Böyle Bir Başvuru Bulunamadı
+  </center>
+<% end %>

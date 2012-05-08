@@ -1,0 +1,43 @@
+<% departments = Department.all %>
+
+<% if departments.count > 0 %>
+  <div class="well"><h5>Bölümler</h5></div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Ad</th>
+        <th>Eklenen Tarih</th>
+        <th>Güncellenen Tarih</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% departments.each do |department| %>
+        <tr>
+          <td><%= department[:id] %></td>
+          <td><%= department[:name] %></td>
+          <td><%= department[:created_at] %></td>
+          <td><%= department[:updated_at] %></td>
+          <td class="links">
+            <a href="/<%= request[:controller] %>/<%= department[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
+            <a href="/<%= request[:controller] %>/<%= department[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>
+
+<a href="/<%= request[:controller] %>/new" class="btn btn-primary">Yeni Bölüm Ekle</a>

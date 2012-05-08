@@ -1,0 +1,43 @@
+<% if doctor = Doctor.find(params[:id]) %>
+
+  <form action="/admin/doctors/update" method="post" class="form-horizontal" >
+    <fieldset>
+      <legend>Doktor Düzenle</legend>
+      <div class="control-group">
+        <label class="control-label" for="input01">Bölüm (*)</label>
+        <div class="controls">
+          <select id="input01" class="input-xlarge" name="department_id">
+            <% Department.all.each do |department| %>
+              <option value="<%= department[:id] %>" <%= 'selected' if department[:id] == doctor[:department_id].to_i %>>
+              <%= department[:name] %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input02">Ad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input03" name="first_name" value="<%= doctor[:first_name] %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input03">Soyad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input03" name="last_name" value="<%= doctor[:last_name] %>">
+        </div>
+      </div>
+      <input type="hidden" name="id" value="<%= doctor[:id] %>"><!-- #FIXME -->
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Güncelle</button>
+      <a class="btn" href="/admin/doctors">İptal</a>
+    </div>
+</form>
+<% else %>
+  <center>
+    Böyle Bir Kullanıcı Bulunamadı
+  </center>
+<% end %>
+

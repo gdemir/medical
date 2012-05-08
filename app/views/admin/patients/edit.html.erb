@@ -1,0 +1,106 @@
+<% if patient = Patient.find(params[:id]) %>
+  <form action="/admin/patients/update" method="post" enctype="multipart/form-data" class="form-horizontal">
+    <fieldset>
+      <legend>Hasta Düzenle</legend>
+      <div class="control-group">
+        <label class="control-label" for="input01">Tc (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input01" name="tc" value="<%= patient[:tc] %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input02">File no (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input02" name="file_no" value="<%= patient[:file_no] %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input03">Ad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input03" name="first_name" value="<%= patient[:first_name] %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input04">Soyad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input04" name="last_name" value="<%= patient[:last_name] %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Cinsiyet</label>
+        <div class="controls">
+          <label class="radio">
+
+              <input type="radio" name="gender" id="optionsRadios1" value="1" <%= "checked" if patient[:gender] %>>
+            <span class="label label-info">Erkek</span>
+          </label>
+          <label class="radio">
+            <input type="radio" name="gender" id="optionsRadios2" value="0" <%= "checked" unless patient[:gender] %>>
+            <span class="label label-important">Kız</span>
+          </label>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input05">Tel (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input05" name="phone" value="<%= patient[:phone] %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="inputIcon">Email (*)</label>
+        <div class="controls">
+          <div class="input-prepend">
+            <span class="add-on"><i class="icon-envelope"></i></span>
+            <input type="text" class="input-large" id="inputIcon" name="email" value="<%= patient[:email] %>">
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="fileInput">Fotoğraf (*)</label>
+        <div class="controls">
+          <% if patient[:image_url] %>
+            <img src="<%= patient[:image_url] %>" width="128" height="128" alt="" />
+          <% end %>
+          <input type="file" class="input-file" id="fileInput" name="image">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input06">Doğum Tarihi (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input06" name="birthday" value="<%= patient[:birthday] %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input07">Doğum Yeri (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input07" name="birthplace" value="<%= patient[:birthplace] %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">ssk</label>
+        <div class="controls">
+          <label class="radio">
+            <input type="radio" name="insurance" id="optionsRadios1" value="1" <%= "checked" if patient[:insurance] %>>
+            Var
+          </label>
+          <label class="radio">
+            <input type="radio" name="insurance" id="optionsRadios2" value="0" <%= "checked" unless patient[:insurance] %>>
+            Yok
+          </label>
+        </div>
+      </div>
+
+      <input type="hidden" name="id" value="<%= patient[:id] %>"><!-- #FIXME -->
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Kaydet</button>
+    </div>
+  </form>
+
+<% else %>
+  <center>
+    Böyle Bir Kullanıcı Bulunamadı
+  </center>
+<% end %>
+

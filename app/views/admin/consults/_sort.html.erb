@@ -1,0 +1,76 @@
+<section id="#">
+<div class="page-header">
+  <h1>Başvuru <small>(<%= File.basename request.path %>)</small></h1>
+</div>
+<div class="row">
+  <div class="span3 columns">
+    <h3>Hakkında</h3>
+    <p>Yandaki belli kıstaslar ile sıralama yapabilirsiniz.</p>
+  </div>
+  <div class="span9 columns">
+    <h2>Sıralama</h2>
+
+    <form action="<%= request.path %>" method="get" class="form-inline" >
+
+      <div class="span2.5">
+        <div class="thumbnail">
+          <div class="caption">
+            <h5>Bölüm</h5>
+
+            <select class="input-medium" name="department_id" onchange='this.form.submit()'>
+              <option value=""></option>
+              <% Department.all.each do |department| %>
+                <option value="<%= department[:id] %>" <%= 'selected' if department[:id] == params[:department_id].to_i %>>
+                <%= department[:name] %>
+                </option>
+              <% end %>
+            </select>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="span2.5">
+        <div class="thumbnail">
+          <div class="caption">
+            <h5>Doktor</h5>
+
+            <select class="input-medium" name="doctor_id" onchange='this.form.submit()'>
+              <option value=""></option>
+              <% if params[:department_id] %>
+                <% Doctor.find_all_by_department_id(params[:department_id]).each do |doctor| %>
+                  <option value="<%= doctor[:id] %>" <%= 'selected' if doctor[:id] == params[:doctor_id].to_i %>>
+                  <%= doctor.full_name %>
+                  </option>
+                <% end %>
+              <% end %>
+            </select>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="span2.5">
+        <div class="thumbnail">
+          <div class="caption">
+            <h5>Gün</h5>
+
+            <select class="input-medium" name="date" onchange='this.form.submit()'>
+              <option value=""></option>
+              <% consult_days.each do |day| %>
+                <option value="<%= day %>" <%= 'selected' if day.to_s == params[:date] %>>
+                <%= "#{day} #{turkish_day(day.wday)}"%>
+                </option>
+              <% end %>
+            </select>
+
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>
+<br />
+
+</section>

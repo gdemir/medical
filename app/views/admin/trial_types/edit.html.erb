@@ -1,0 +1,97 @@
+<section id="#">
+<div class="page-header">
+  <h1>Test Tipi <small>(edit)</small></h1>
+</div>
+<div class="row">
+  <div class="span3 columns">
+    <h3>Test Tipi</h3>
+    <p>
+    <% if trial_type = TrialType.find(params[:id]) %>
+
+      <% trials = Trial.find_all_by_trial_type_id(trial_type[:id]) %>
+
+      <form action="/admin/trial_types/update" method="post" class="">
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="input01">Ad (*)</label>
+            <div class="controls">
+              <input type="text" class="input-large" id="input01" name="name" value="<%= trial_type[:name] %>">
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="input03">Fiyat (*)</label>
+            <div class="controls">
+              <input type="text" class="input-large" id="input03" name="price" value="<%= trial_type[:price] %>">
+            </div>
+          </div>
+          <input type="hidden" name="id" value="<%= trial_type[:id] %>"><!-- #FIXME -->
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Güncelle</button>
+          <a class="btn" href="/admin/trial_types/<%= trial_type[:id] %>">İptal</a>
+        </div>
+      </form>
+    <% else %>
+      <center>
+        Böyle Bir Kullanıcı Bulunamadı
+      </center>
+    <% end %>
+    </p>
+  </div>
+  <div class="span9 columns">
+    <h2>Testler</h2>
+
+    <% if trials.count > 0 %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ad</th>
+            <th>Min Range</th>
+            <th>Max Range</th>
+            <th>Units</th>
+            <th>Eklenen Tarih</th>
+            <th>Güncellenen Tarih</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% trials.each do |trial| %>
+
+            <form action="/admin/trials/update" method="post" class="">
+
+              <tr>
+                <td><%= trial[:id] %></td>
+                <td><input type="text" class="input-medium" name="name" value="<%= trial[:name] %>"></td>
+                <td><input type="text" class="input-mini" name="min_range" value="<%= trial[:min_range] %>"></td>
+                <td><input type="text" class="input-mini" name="max_range" value="<%= trial[:max_range] %>"></td>
+                <td><input type="text" class="input-mini" name="units" value="<%= trial[:units] %>"></td>
+                <td><%= trial[:created_at] %></td>
+                <td><%= trial[:updated_at] %></td>
+                <td class="links">
+                  <button type="submit" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Güncelle</button>
+                  <a class="btn btn-danger" href="/admin/trials/<%= trial[:id] %>/destroy"
+                    onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">
+                    <i class="icon-trash icon-white"></i> Sil
+                  </a>
+                </td>
+              </tr>
+
+              <input type="hidden" name="id" value="<%= trial[:id] %>"><!-- #FIXME -->
+            </form>
+
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <center>
+        Hiç Test Bulunamadı
+      </center>
+    <% end %>
+    <center>
+      <a href="/admin/trials/<%= trial_type[:id] %>/new" class="btn btn-primary">Yeni Test Ekle</a>
+    </center>
+  </div>
+</div>
+</section>

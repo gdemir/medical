@@ -1,0 +1,47 @@
+<% invoices = Invoice.all %>
+
+<% if invoices.count > 0 %>
+  <div class="well"><h5>İlaçlar</h5></div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Ad</th>
+        <th>İçerik</th>
+        <th>Fiyat</th>
+        <th>Eklenen Tarih</th>
+        <th>Güncellenen Tarih</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% invoices.each do |invoice| %>
+        <tr>
+          <td><%= invoice[:id] %></td>
+          <td><%= invoice[:name] %></td>
+          <td><%= invoice[:content] %></td>
+          <td><%= invoice[:price] %></td>
+          <td><%= invoice[:created_at] %></td>
+          <td><%= invoice[:updated_at] %></td>
+          <td class="links">
+            <a href="/<%= request[:controller] %>/<%= invoice[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
+            <a href="/<%= request[:controller] %>/<%= invoice[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>
+
+<a href="/<%= request[:controller] %>/new" class="btn btn-primary">Yeni İlaç Ekle</a>

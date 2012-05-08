@@ -1,0 +1,58 @@
+<% if admin = Admin.find(params[:id]) %>
+
+  <form class="form-horizontal">
+    <fieldset>
+      <legend>Hasta</legend>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Ad (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" id="disabledInput" value="<%= admin[:first_name] %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Soyad (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" id="disabledInput" value="<%= admin[:last_name] %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="fileInput">Fotoğraf (*)</label>
+      <div class="controls">
+        <div class="input-prepend">
+          <span class="add-on"><i class="icon-camera"></i></span>
+          <img src="<%= admin[:image_url] %>" width="128" height="128" alt="" />
+        </div>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Doğum Tarihi (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" id="disabledInput" value="<%= admin[:password] %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">status</label>
+      <div class="controls">
+        <label class="radio">
+          <input type="radio" name="status" id="optionsRadios1" <%= "checked" if admin[:status] %>>
+          1
+        </label>
+        <label class="radio">
+          <input type="radio" name="status" id="optionsRadios2" <%= "checked" unless admin[:status] %>>
+          0
+        </label>
+      </div>
+    </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <a href="/<%= request[:controller] %>/<%= admin[:id] %>/edit" class="btn btn-primary">Düzenle</a>
+      <a href="/<%= request[:controller] %>/<%= admin[:id] %>/destroy" class="btn btn-danger"
+      onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">Sil</a>
+    </div>
+  </form>
+<% else %>
+  <center>
+    Böyle Bir Hasta Bulunamadı
+  </center>
+<% end %>

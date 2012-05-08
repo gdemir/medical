@@ -1,0 +1,66 @@
+<%= render :partial => "admin/consults/sort" %>
+<%
+  doctor_ids = if params[:department_id] and params[:department_id] != ""
+                 if params[:doctor_id] and params[:doctor_id] != ""
+                   params[:doctor_id]
+                 else
+                   Department.find(params[:department_id]).doctor.select(:id)
+                 end
+               else
+                 Doctor.select(:id).all
+               end
+
+  consults = if params[:date] and params[:date] != ""
+               Consult.where("doctor_id" => doctor_ids).where("date like ?", "#{params[:date]}%")
+             else
+               Consult.where("doctor_id" => doctor_ids)#.where("date >=? ", consult_days[0])
+             end
+%>
+
+<% if consults.count > 0 %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Hasta</th>
+        <th>Bölüm</th>
+        <th>Doktor</th>
+        <th>Tarih</th>
+        <th>Saat</th>
+        <th>Ödeme</th>
+        <!--<th>Ekleme Tarihi</th>
+        <th>Güncelleme Tarihi</th>-->
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% consults.each do |consult| %>
+        <tr>
+          <td><%= consult[:id] %></td>
+          <td><%= consult.patient.full_name %></td>
+          <td><%= consult.doctor.department.name %></td>
+          <td><%= consult.doctor.full_name %></td>
+          <td><%= consult.day %></td>
+          <td><%= consult.hour %></td>
+          <td><span class="label label-<%= consult[:status] ? "success" : "important"%>"><%= consult[:status] ? "o" : "x"%></span></td>
+          <!--<td><%= consult[:created_at] %></td>
+          <td><%= consult[:updated_at] %></td>-->
+          <td class="links">
+            <a href="/<%= request[:controller] %>/<%= consult[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
+            <a href="/<%= request[:controller] %>/<%= consult[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>

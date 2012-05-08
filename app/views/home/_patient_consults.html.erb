@@ -1,0 +1,39 @@
+<% if session[:patient] %>
+  <% consults = Consult.where("patient_id", session[:patient][:id]).where("date >=? ", consult_days[0]) %>
+
+  <% if consults != [] %>
+    <div data-spy="scroll" data-offset="0" class="scrollspy">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Bölüm</th>
+            <th>Doktor</th>
+            <th>Tarih</th>
+            <th>Saat</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% consults.each do |consult| %>
+            <tr>
+              <td><%= consult.doctor.department.name %></td>
+              <td><%= consult.doctor.full_name %></td>
+              <td><%= consult.day %></td>
+              <td><%= consult.hour %></td>
+              <td>
+                <a class="btn btn-danger" onClick="return confirm('Silmek istediğinizden emin misiniz ?');"
+                  href="/home/consult_destroy/<%= consult.id.to_s+"/"+consult.patient_id.to_s %>">
+                  İptal Et
+                </a>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <center>
+      Hiç Kayıt Bulunamadı
+    </center>
+  <% end %>
+<% end %>

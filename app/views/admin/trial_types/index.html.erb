@@ -1,0 +1,59 @@
+<section id="#">
+<div class="page-header">
+  <h1>Test Tipi <small>(test_types)</small></h1>
+</div>
+<div class="row">
+  <div class="span3 columns">
+    <h3>Hakkında</h3>
+    <p>Laboratuvar testleridir.</p>
+  </div>
+  <div class="span9 columns">
+    <h2>Testler</h2>
+  </div>
+</div>
+</section>
+
+<% trial_types = TrialType.all %>
+
+<% if trial_types.count > 0 %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Ad</th>
+        <th>Fiyat</th>
+        <th>Eklenen Tarih</th>
+        <th>Güncellenen Tarih</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% trial_types.each do |trial_type| %>
+        <tr>
+          <td><%= trial_type[:id] %></td>
+          <td><%= trial_type[:name] %></td>
+          <td><%= trial_type[:price] %></td>
+          <td><%= trial_type[:created_at] %></td>
+          <td><%= trial_type[:updated_at] %></td>
+          <td class="links">
+            <a href="/<%= request[:controller] %>/<%= trial_type[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
+            <a href="/<%= request[:controller] %>/<%= trial_type[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>
+
+<a href="/<%= request[:controller] %>/new" class="btn btn-primary">Yeni Test Tipi Ekle</a>

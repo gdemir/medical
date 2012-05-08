@@ -1,0 +1,45 @@
+<% admins = Admin.all %>
+
+<% if admins.count > 0 %>
+  <div class="well"><h5>Adminler</h5></div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Ad Soyad</th>
+        <th>Grup</th>
+        <th>Eklenen Tarih</th>
+        <th>Güncellenen Tarih</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% admins.each do |admin| %>
+        <tr>
+          <td><%= admin[:id] %></td>
+          <td><%= admin.full_name %></td>
+          <td><%= admin[:status] %></td>
+          <td><%= admin[:created_at] %></td>
+          <td><%= admin[:updated_at] %></td>
+          <td class="links">
+            <a href="/<%= request[:controller] %>/<%= admin[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
+            <a href="/<%= request[:controller] %>/<%= admin[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>
+
+<a href="/<%= request[:controller] %>/new" class="btn btn-primary">Yeni Admin Ekle</a>

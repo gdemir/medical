@@ -1,0 +1,28 @@
+<% if session[:patient] %>
+  <center>
+    <form action="/home/department_query" method="post" class="well form-inline" >
+
+      <select class="input-large" name="department_id" onchange='this.form.submit()'>
+        <option value="">Bölüm</option>
+        <% Department.all.each do |department| %>
+          <option value="<%= department[:id] %>" <%= 'selected' if session[:department] and department[:id] == session[:department][:id].to_i %>>
+            <%= department[:name] %>
+          </option>
+        <% end %>
+      </select>
+
+      <select class="input-large" name="doctor_id" onchange='this.form.submit()'>
+        <option value="">Doktor</option>
+        <% if session[:department] %>
+          <% Doctor.find_all_by_department_id(session[:department][:id]).each do |doctor| %>
+            <option value="<%= doctor[:id] %>" <%= 'selected' if session[:doctor] and doctor[:id] == session[:doctor][:id].to_i %>>
+              <%= doctor[:first_name] + " " + doctor[:last_name] %>
+            </option>
+          <% end %>
+        <% end %>
+      </select>
+
+      <button type="submit" class="btn btn-danger">Sorgula</button>
+    </form>
+  </center>
+<% end %>

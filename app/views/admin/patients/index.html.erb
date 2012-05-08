@@ -1,0 +1,49 @@
+<% patients = Patient.all %>
+
+<% if patients.count > 0 %>
+  <div class="well"><h5>Hastalar</h5></div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Tc</th>
+        <th>File no</th>
+        <th>Ad Soyad</th>
+        <th>Doğum Yeri</th>
+        <th>Eklenen Tarih</th>
+        <th>Güncellenen Tarih</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% patients.each do |patient| %>
+        <tr>
+          <td><%= patient[:id] %></td>
+          <td><%= patient[:tc] %></td>
+          <td><%= patient[:file_no] %></td>
+          <td><%= patient.full_name %></td>
+          <td><%= patient[:birthplace] %></td>
+          <td><%= patient[:created_at] %></td>
+          <td><%= patient[:updated_at] %></td>
+          <td class="links">
+            <a href="/<%= request[:controller] %>/<%= patient[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
+            <a href="/<%= request[:controller] %>/<%= patient[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>
+
+<a href="/<%= request[:controller] %>/new" class="btn btn-primary">Yeni Hasta Ekle</a>

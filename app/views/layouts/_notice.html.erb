@@ -1,0 +1,11 @@
+<!-- notice -->
+<div class="row">
+  <% [:success, :error, :info].each do |level| %>
+    <% unless flash[level].blank? %>
+      <div class="alert alert-<%= level %>">
+        <a class="close" data-dismiss="alert">×</a>
+        <%= content_tag :p, simple_format(flash[level]) %>
+      </div>
+    <% end %>
+  <% end %>
+</div><!--/.notice -->

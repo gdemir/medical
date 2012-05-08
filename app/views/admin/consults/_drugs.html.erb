@@ -1,0 +1,52 @@
+<!-- modal-form -->
+<div class="modal hide fade" id="drug">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3>İlaçlar</h3>
+  </div>
+  <div class="modal-body">
+
+    <% drugs = Drug.all %>
+
+    <% if drugs.count > 0 %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ad</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <% drugs.each do |drug| %>
+            <form action="/admin/invoices" method="post" class="">
+
+              <tr>
+                <td><%= drug[:id] %></td>
+                <td><%= drug[:name] %></td>
+                <td class="links"><button type="submit" class="btn btn-success"><i class="icon-plus icon-white"></i> Ekle</button></td>
+              </tr>
+
+              <input type="hidden" name="consult_id" value="<%= params[:id] %>"><!-- #FIXME -->
+              <input type="hidden" name="product_id" value="<%= drug[:id] %>">  <!-- #FIXME -->
+              <input type="hidden" name="product_type" value="1">               <!-- #FIXME -->
+              <input type="hidden" name="price" value="<%= drug[:price] %>">    <!-- #FIXME -->
+            </form>
+          <% end %>
+
+        </tbody>
+      </table>
+    <% else %>
+      <center>
+        Hiç Kayıt Bulunamadı
+      </center>
+
+      <div class="form-actions">
+        <center>
+          <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+        </center>
+      </div>
+    <% end %>
+  </div>
+</div><!--/.modal-form -->

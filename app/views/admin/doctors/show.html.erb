@@ -1,0 +1,35 @@
+<% if doctor = Doctor.find(params[:id]) %>
+  <form class="form-horizontal">
+    <fieldset>
+      <legend>Doktor</legend>
+      <div class="control-group">
+        <label class="control-label" for="disabledInput">Bölüm (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= doctor.department.name %>" disabled>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="disabledInput">Ad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= doctor[:first_name] %>" disabled>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="disabledInput">Soyad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge disabled" id="disabledInput"  value="<%= doctor[:last_name] %>" disabled>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <a href="/<%= request[:controller] %>/<%= doctor[:id] %>/edit" class="btn btn-primary">Düzenle</a>
+      <a href="/<%= request[:controller] %>/<%= doctor[:id] %>/destroy" class="btn btn-danger"
+      onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">Sil</a>
+    </div>
+  </form>
+<% else %>
+  <center>
+    Böyle Bir Doktor Bulunamadı
+  </center>
+<% end %>

@@ -1,0 +1,36 @@
+<% if drug = Drug.find(params[:id]) %>
+  <form action="/admin/drugs/update" method="post" class="form-horizontal" >
+    <fieldset>
+      <legend>İlaç Düzenle</legend>
+      <div class="control-group">
+        <label class="control-label" for="input01">Ad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input01" name="name" value="<%= drug[:name] %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input02">İçerik (*)</label>
+        <div class="controls">
+          <textarea rows="4" class="input-xlarge" id="input02" name="content"><%= drug[:content] %></textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input03">Fiyat (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input03" name="price" value="<%= drug[:price] %>">
+        </div>
+      </div>
+      <input type="hidden" name="id" value="<%= drug[:id] %>"><!-- #FIXME -->
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Güncelle</button>
+      <a class="btn" href="/admin/drugs">İptal</a>
+    </div>
+  </form>
+<% else %>
+  <center>
+    Böyle Bir Kullanıcı Bulunamadı
+  </center>
+<% end %>
+

@@ -1,0 +1,73 @@
+<section id="#">
+<div class="page-header">
+  <h1>Test Tipi <small>(show)</small></h1>
+</div>
+<div class="row">
+  <div class="span3 columns">
+    <h3>Test Tipi</h3>
+    <p>
+    <% if trial_type = TrialType.find(params[:id]) %>
+
+      <% trials = Trial.find_all_by_trial_type_id(trial_type[:id]) %>
+      Ad
+      <input type="text" class="input-large disabled" id="disabledInput" value="<%= trial_type[:name] %>" disabled>
+      Fiyat
+      <input type="text" class="input-large disabled" id="disabledInput" value="<%= trial_type[:price] %>" disabled>
+      <a href="/<%= request[:controller] %>/<%= trial_type[:id] %>/edit" class="btn btn-primary">Düzenle</a>
+      <a href="/<%= request[:controller] %>/<%= trial_type[:id] %>/destroy" class="btn btn-danger"
+        onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">Sil</a>
+      </p>
+    <% else %>
+      <center>
+        Böyle Bir Test Bulunamadı
+      </center>
+    <% end %>
+  </div>
+  <div class="span9 columns">
+    <h2>Testler</h2>
+
+    <% if trials.count > 0 %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ad</th>
+            <th>Min Range</th>
+            <th>Max Range</th>
+            <th>Units</th>
+            <!--<th>Eklenen Tarih</th>
+            <th>Güncellenen Tarih</th>-->
+            <!--<th></th>-->
+          </tr>
+        </thead>
+        <tbody>
+          <% trials.each do |trial| %>
+            <tr>
+              <td><%= trial[:id] %></td>
+              <td><input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= trial[:name] %>" disabled></td>
+              <td><input type="text" class="input-small disabled" id="disabledInput" value="<%= trial[:min_range] %>" disabled></td>
+              <td><input type="text" class="input-small disabled" id="disabledInput" value="<%= trial[:max_range] %>" disabled></td>
+              <td><input type="text" class="input-small disabled" id="disabledInput" value="<%= trial[:units] %>" disabled></td>
+              <!--<td><%= trial[:created_at] %></td>
+              <td><%= trial[:updated_at] %></td>-->
+              <!--<td class="links">
+                <a href="/<%= request[:controller] %>/<%= trial[:id] %>" rel="tooltip" class="icon-pencil" title="Düzenle"></a>
+                <a href="/<%= request[:controller] %>/<%= trial[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+                  onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+              </td>-->
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <center>
+        Hiç Test Bulunamadı
+      </center>
+
+      <center>
+        <a href="/admin/trials/<%= trial_type[:id] %>/new" class="btn btn-primary">Yeni Test Ekle</a>
+      </center>
+    <% end %>
+  </div>
+</div>
+</section>

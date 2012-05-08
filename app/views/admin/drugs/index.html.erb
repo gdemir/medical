@@ -1,0 +1,47 @@
+<% drugs = Drug.all %>
+
+<% if drugs.count > 0 %>
+  <div class="well"><h5>İlaçlar</h5></div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Ad</th>
+        <th>İçerik</th>
+        <th>Fiyat</th>
+        <th>Eklenen Tarih</th>
+        <th>Güncellenen Tarih</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% drugs.each do |drug| %>
+        <tr>
+          <td><%= drug[:id] %></td>
+          <td><%= drug[:name] %></td>
+          <td><%= drug[:content] %></td>
+          <td><%= drug[:price] %></td>
+          <td><%= drug[:created_at] %></td>
+          <td><%= drug[:updated_at] %></td>
+          <td class="links">
+            <a href="/<%= request[:controller] %>/<%= drug[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
+            <a href="/<%= request[:controller] %>/<%= drug[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>
+
+<a href="/<%= request[:controller] %>/new" class="btn btn-primary">Yeni İlaç Ekle</a>

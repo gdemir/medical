@@ -1,0 +1,41 @@
+<% if session[:patient] and session[:department] and session[:doctor] %>
+  <% begin_min, end_min, examination_min = consult_times %>
+
+  <div data-spy="scroll" data-offset="0" class="scrollspy">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Tarih</th>
+          <th>Saat</th>
+          <th>Durum</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% consult_days.each do |day| %>
+          <% (begin_min..end_min).step(examination_min).each do |min| %>
+            <%
+              hour = (min / 60).to_s
+              min  = (min % 60 < 10) ? "0#{min % 60}" : min % 60
+              hour = "#{hour}:#{min}"
+            %>
+            <form action="/home/consult_register" method="post" class="well form-inline">
+              <input type="hidden" name="date" value="<%= "#{day} #{hour}" %>">
+              <tr>
+                <td><%= "#{day} #{turkish_day(day.wday)}" %></td>
+                <td><%= hour %></td>
+                <% if Consult.find_by_doctor_id_and_date(session[:doctor][:id], "#{day} #{hour}") %>
+                  <td><span class="label label-important">x</span></td>
+                  <td><span class="label label-info">Dolu</span></td>
+                <% else %>
+                  <td><span class="label label-success">o</span></td>
+                  <td><button type="submit" class="btn btn-success">Randevu Al</button></td>
+                <% end %>
+              </tr>
+            </form>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

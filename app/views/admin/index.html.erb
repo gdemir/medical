@@ -1,0 +1,42 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Kayıtlar</th>
+      <th>Sayı</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Yöneticiler</td>
+      <td><%= Admin.count %></td>
+    </tr>
+    <tr>
+      <td>Hastalar</td>
+      <td><%= Patient.count %></td>
+    </tr>
+    <tr>
+      <td>Bölümler</td>
+      <td><%= Department.count %></td>
+    </tr>
+    <tr>
+      <td>Doktorlar</td>
+      <td><%= Doctor.count %></td>
+    </tr>
+    <tr>
+      <td>Testler</td>
+      <td><%= TrialType.count %></td>
+    </tr>
+    <tr>
+      <td>Hasta Test İstekleri</td>
+      <td><%= TrialRequest.count %></td>
+    </tr>
+    <tr>
+      <td>Hasta Başvuruları</td>
+      <td><%= Consult.count %></td>
+    </tr>
+    <tr>
+      <td>İlaçlar</td>
+      <td><%= Drug.count %></td>
+    </tr>
+  </tbody>
+</table>

@@ -1,0 +1,33 @@
+<form action="/admin/profile_update" method="post" enctype="multipart/form-data" class="form-horizontal">
+  <div class="control-group">
+    <label class="control-label" for="input02">Adı (*)</label>
+    <div class="controls">
+      <input type="text" class="input-xlarge required" id="input02" name="first_name" value="<%= session[:admin][:first_name] %>">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="input03">Soyadı (*)</label>
+    <div class="controls">
+      <input type="text" class="input-xlarge required" id="input03" name="last_name" value="<%= session[:admin][:last_name] %>">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="input11">Parola</label>
+    <div class="controls">
+      <input type="text" class="input-xlarge" id="input11" name="password" value="<%= session[:admin][:password] %>">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="fileInput">Fotoğraf</label>
+    <div class="controls">
+      <% if session[:admin][:image_url] %>
+        <img src="<%= session[:admin][:image_url] %>" width="128" height="128" alt="Resim Yüklenmemiş"/>
+      <% end %>
+      <input type="file" class="input-file" id="fileInput" name="image">
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Bilgilerimi Güncelle</button>
+  </div>
+</form>

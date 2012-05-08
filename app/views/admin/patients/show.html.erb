@@ -1,0 +1,104 @@
+<% if patient = Patient.find(params[:id]) %>
+
+  <form class="form-horizontal">
+    <fieldset>
+      <legend>Hasta</legend>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Tc (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= patient[:tc] %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">File no (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= patient[:file_no] %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Ad (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= patient[:first_name] %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Soyad (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= patient[:last_name] %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">Cinsiyet</label>
+      <div class="controls">
+        <label class="radio">
+          <input type="radio" class="disabled" id="disabledInput" <%= "checked" if patient[:gender] %> disabled>
+          <span class="label label-info">Erkek</span>
+        </label>
+        <label class="radio">
+          <input type="radio" class="disabled" id="disabledInput" <%= "checked" unless patient[:gender] %> disabled>
+          <span class="label label-important">Kız</span>
+        </label>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Tel (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= patient[:phone] %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Email (*)</label>
+      <div class="controls">
+        <div class="input-prepend">
+          <span class="add-on"><i class="icon-envelope"></i></span>
+          <input type="text" class="input-large disabled" id="disabledInput" value="<%= patient[:email] %>" disabled>
+        </div>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="fileInput">Fotoğraf (*)</label>
+      <div class="controls">
+        <div class="input-prepend">
+          <span class="add-on"><i class="icon-camera"></i></span>
+          <img src="<%= patient[:image_url] %>" width="128" height="128" alt="" />
+        </div>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Doğum Tarihi (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= patient[:birthday] %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Doğum Yeri (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= patient[:birthplace] %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label">ssk</label>
+      <div class="controls">
+        <label class="radio">
+          <input type="radio" class="disabled" id="disabledInput" <%= "checked" if patient[:insurance] %> disabled>
+          Var
+        </label>
+        <label class="radio">
+          <input type="radio" class="disabled" id="disabledInput"  <%= "checked" unless patient[:insurance] %> disabled>
+          Yok
+        </label>
+      </div>
+    </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <a href="/<%= request[:controller] %>/<%= patient[:id] %>/edit" class="btn btn-primary">Düzenle</a>
+      <a href="/<%= request[:controller] %>/<%= patient[:id] %>/destroy" class="btn btn-danger"
+      onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">Sil</a>
+    </div>
+  </form>
+<% else %>
+  <center>
+    Böyle Bir Hasta Bulunamadı
+  </center>
+<% end %>
