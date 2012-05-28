@@ -64,26 +64,26 @@ body {
 }
 
 p {
-  font-size: 16px;
-  color: #606060;
-  line-height: 1.5;
-  margin: 0 0 1.2em; }
+    font-size: 16px;
+    color: #606060;
+    line-height: 1.5;
+margin: 0 0 1.2em; }
 
 section {
-  padding-top: 20px; }
-  section h2 {
+padding-top: 20px; }
+section h2 {
     text-align: center;
-    margin: 0; }
-  section h3 {
+margin: 0; }
+section h3 {
     margin-bottom: 0.2em;
     line-height: 1.2;
-    margin-top: 0; }
-  section .intro {
+margin-top: 0; }
+section .intro {
     text-align: center;
     font-size: 18px;
     color: #777;
-    margin: 0.5em 0 3em; }
-  section.features .span6 {
-    margin-bottom: 40px; }
-    section.features .span6 > p, section.features .span6 > h3 {
-      margin-left: 98px; }
+margin: 0.5em 0 3em; }
+section.features .span6 {
+margin-bottom: 40px; }
+section.features .span6 > p, section.features .span6 > h3 {
+margin-left: 98px; }
