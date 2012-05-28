@@ -1,4 +1,6 @@
 # encoding: utf-8
+require 'prawn' # http://cracklabs.com/prawnto # pdf
+
 class AdminController < ApplicationController
 
   include ApplicationHelper
@@ -6,23 +8,32 @@ class AdminController < ApplicationController
   before_filter :require_admin, :except => [:login, :sign_in, :logout]
 
   def login
-    redirect_to session[:admin] ? '/admin' : '/home'
+    redirect_to '/admin' if session[:admin]
   end
 
   def sign_in
-    session[:admin] = Admin.find_by_first_name_and_password(params[:first_name], params[:password])
-    if params[:first_name] or params[:password]
-      flash[:error] = "Oops! İsminiz veya şifreniz hatalı, belkide bunlardan sadece biri hatalıdır?"
+    if session[:admin] = Admin.find_by_first_name_and_password(params[:first_name], params[:password])
+      session[:superadmin] = true if session[:admin][:status] == 1
+      flash[:success] = "Yönetici paneline hoşgeldiniz"
+      redirect_to '/admin/index'
     else
-      flash[:success] = "Ooo! Admin de buradaymış"
+      if params[:first_name] or params[:password]
+        flash[:error] = "Oops! İsminiz veya şifreniz hatalı, belkide bunlardan sadece biri hatalıdır?"
+      end
+      redirect_to '/admin/login'
     end
-    redirect_to '/admin/login'
   end
 
   def logout
     reset_session
     session[:admin] = nil
     redirect_to '/admin/login'
+  end
+
+  def approval
+    if session[:admin][:password] == params[:password]
+      render params[:path]
+    end
   end
 
   def profile_update

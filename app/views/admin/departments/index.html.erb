@@ -2,13 +2,11 @@
 
 <% if departments.count > 0 %>
   <div class="well"><h5>Bölümler</h5></div>
-  <table class="table">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>#</th>
         <th>Ad</th>
-        <th>Eklenen Tarih</th>
-        <th>Güncellenen Tarih</th>
         <th></th>
       </tr>
     </thead>
@@ -17,8 +15,6 @@
         <tr>
           <td><%= department[:id] %></td>
           <td><%= department[:name] %></td>
-          <td><%= department[:created_at] %></td>
-          <td><%= department[:updated_at] %></td>
           <td class="links">
             <a href="/<%= request[:controller] %>/<%= department[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
             <a href="/<%= request[:controller] %>/<%= department[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"

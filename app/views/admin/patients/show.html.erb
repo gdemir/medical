@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="control-group">
-      <label class="control-label" for="disabledInput">File no (*)</label>
+      <label class="control-label" for="disabledInput">Dosya no (*)</label>
       <div class="controls">
         <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= patient[:file_no] %>" disabled>
       </div>
@@ -77,16 +77,27 @@
       </div>
     </div>
     <div class="control-group">
-      <label class="control-label">ssk</label>
+      <label class="control-label" for="disabledInput">Kan Grup (*)</label>
       <div class="controls">
-        <label class="radio">
-          <input type="radio" class="disabled" id="disabledInput" <%= "checked" if patient[:insurance] %> disabled>
-          Var
-        </label>
-        <label class="radio">
-          <input type="radio" class="disabled" id="disabledInput"  <%= "checked" unless patient[:insurance] %> disabled>
-          Yok
-        </label>
+        <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= patient.blood_group.name %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Adres (*)</label>
+      <div class="controls">
+        <textarea rows="4" class="input-xlarge disabled" id="disabledInput" disabled><%= patient[:adress] %></textarea>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Anne Ad (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= patient[:mother_name] %>" disabled>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="disabledInput">Baba Ad (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= patient[:father_name] %>" disabled>
       </div>
     </div>
     </fieldset>

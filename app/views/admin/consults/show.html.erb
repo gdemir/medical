@@ -10,15 +10,11 @@
         </div>
       </div>
 
-      <!--consult info-->
+      <!--patient-->
       <div class="span9">
         <div class="row-fluid">
           <table class="table table-bordered">
             <tbody>
-              <tr>
-                <th>Hasta No</th>
-                <td><%= patient[:id] %></td>
-              </tr>
               <tr>
                 <th>Tc Kimlik No</th>
                 <td><%= patient[:tc] %></td>
@@ -32,105 +28,452 @@
                 <td><%= patient[:file_no] %></td>
               </tr>
               <tr>
-                <th>Son Başvuru Tarih/Saat</th>
+                <th>Son Randevu Tarih/Saat</th>
                 <td><%= patient.last_visit_date %></td>
               </tr>
               <tr>
-                <th>Son Başvuru Doktor</th>
-                <td><%= patient.last_visit_doctor %></td>
+                <th>Son Randevu Bölüm/Doktor</th>
+                <td><%= patient.last_visit_department_and_doctor %></td>
+              </tr>
+              <tr>
+                <th>Randevu Alınan Bölüm/Doktor</th>
+                <td><%= consult.department_and_doctor %></td>
               </tr>
             </tbody>
           </table>
 
-          <%= render :partial => "admin/consults/drugs" %>
-          <%= render :partial => "admin/consults/trial_types" %>
-
-          <a data-toggle="modal" class="btn btn-primary" href="#drug"><i class="icon-plus icon-white"></i>İlaç Ekle</a>
-          <a data-toggle="modal" class="btn btn-primary" href="#trial_type"><i class="icon-plus icon-white"></i>Test Tipi Ekle</a>
-
         </div>
-      </div><!--/.consult info-->
+      </div><!--/.patient-->
 
     </div>
   </div>
 
-  <div class="span10">
+  <div class="pull-right">
+    <%= render :partial => "admin/consults/drug_requests" %>
+    <%= render :partial => "admin/consults/trial_requests" %>
+
+    <table class="table table-condensed">
+      <tbody>
+        <th>Cevap</th>
+        <td><% if admin = Admin.find_by_id(consult[:reply_admin_id]) %><%= admin.full_name %><% end %></td>
+      </tbody>
+    </table>
+
+    <% if consult[:state] %>
+      <a data-toggle="modal" class="btn btn-primary" href="#trial_request" title="Test Tipi İste">
+        <i class="icon-arrow-down icon-white"></i> Test Tipi
+      </a>
+      <a data-toggle="modal" class="btn btn-primary" href="#drug_request" title="İlaç İste">
+        <i class="icon-arrow-down icon-white"></i> İlaç
+      </a>
+    <% end %>
+    <% if consult[:state] %>
+      <a class="btn btn-success" href="/admin/consults/<%= consult[:id] %>/state"
+        onclick="return confirm('Bu başvuruyu kapatmak istiyor musunuz?')">
+        <i class="icon-ok icon-white"></i> İşlemi Bitir
+      </a>
+    <% else %>
+      <a class="btn btn-primary" href="/admin/consults/<%= consult[:id] %>/state"
+        onclick="return confirm('Bu başvuruyu açmak istiyor musunuz?')">
+        <i class="icon-ok icon-white"></i> İşlemi Aç
+      </a>
+    <% end %>
+  </div>
+
+  <div class="span12">
     <h3>İşlemler</h3>
-    <p>Ödeme işlemleri için <code>Ödeme</code> Hasta geçmişi için <code>Geçmiş</code> kısmına tıklayınız.</p>
+    <p>Ödeme işlemleri için <code>Ödeme</code> Hasta geçmişi için <code>Hasta Geçmiş</code> kısmına tıklayınız.</p>
     <!-- tabbable -->
     <div class="tabbable" style="margin-bottom: 9px;">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#1" data-toggle="tab">Ödeme</a></li>
-        <li><a href="#2" data-toggle="tab">Geçmiş</a></li>
+        <li><a href="#2" data-toggle="tab">Hasta Geçmiş</a></li>
+        <li><a href="#3" data-toggle="tab">Test Tipi İstekleri</a></li>
+        <li><a href="#4" data-toggle="tab">İlaç İstekleri</a></li>
       </ul>
       <div class="tab-content">
         <div class="tab-pane active" id="1">
 
-          <% invoices = Invoice.find_all_by_consult_id(params[:id]) %>
-          <table class="table">
+          <table class="table table-condensed">
             <thead>
               <tr>
                 <th>Ürün</th>
+                <th>Adet</th>
                 <th>Fiyat</th>
+                <th>Toplam</th>
               </tr>
             </thead>
             <tbody>
-              <% invoices.each do |invoice| %>
-                <form action="/admin/invoices/update" method="post" class="">
+              <% unless consult[:payment] or !consult[:state] %>
 
+                <% consult.all_product.each do |invoice| %>
+                  <form action="/admin/invoices/update" method="post" class="">
+                    <tr>
+                      <% if invoice[:product_type] %>
+                        <td><input type="text" class="input-xlarge" value="<%= Drug.find(invoice[:product_id]).name %>" disabled></td>
+                      <% else %>
+                        <td><input type="text" class="input-xlarge" value="<%= TrialType.find(invoice[:product_id]).name %>" disabled></td>
+                      <% end %>
+                      <td><%= invoice[:sequence] %></td>
+                      <td><input type="text" class="input-mini" name="price" value="<%= invoice[:price] %>"></td>
+                      <td><%= invoice[:sequence] * invoice[:price] %></td>
+                      <td class="links">
+                        <button type="submit" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Güncelle</button>
+                        <a class="btn btn-danger" href="/admin/invoices/<%= invoice[:id] %>/destroy"
+                          onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">
+                          <i class="icon-trash icon-white"></i> Sil
+                        </a>
+                      </td>
+                    </tr>
+
+                    <input type="hidden" name="id" value="<%= invoice[:id] %>"><!-- #FIXME -->
+                  </form>
+                <% end %>
+
+              <% else %>
+
+                <% consult.all_product.each do |invoice| %>
                   <tr>
                     <% if invoice.product_type %>
-                    <td><input type="text" class="input-xlarge" value="<%= Drug.find(invoice.product_id).name %>" disabled></td>
+                      <td><input type="text" class="input-xlarge" value="<%= Drug.find(invoice.product_id).name %>" disabled></td>
                     <% else %>
-                    <td><input type="text" class="input-xlarge" value="<%= TrialType.find(invoice.product_id).name %>" disabled></td>
+                      <td><input type="text" class="input-xlarge" value="<%= TrialType.find(invoice.product_id).name %>" disabled></td>
                     <% end %>
-                    <td><input type="text" class="input-mini" name="price" value="<%= invoice[:price] %>"></td>
-                    <td class="links">
-                      <button type="submit" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Güncelle</button>
-                      <a class="btn btn-danger" href="/admin/invoices/<%= invoice[:id] %>/destroy"
-                        onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">
-                        <i class="icon-trash icon-white"></i> Sil
-                      </a>
-                    </td>
+                    <td><input type="text" class="input-mini" value="<%= invoice[:sequence] %>" disabled></td>
+                    <td><input type="text" class="input-mini" value="<%= invoice[:price] %>" disabled></td>
+                    <td><input type="text" class="input-mini" value="<%= invoice[:sequence] * invoice[:price] %>"disabled></td>
                   </tr>
+                <% end %>
 
-                  <input type="hidden" name="id" value="<%= invoice[:id] %>"><!-- #FIXME -->
-                </form>
               <% end %>
+
+              <tr>
+                <th>Toplam</th>
+                <td></td>
+                <td></td>
+                <td><%= consult.total_price %></td>
+                <td>
+                  <% if !consult[:state] %>
+                    <% if consult[:payment] %><span class="label label-success"><i class="icon-ok-sign icon-white"></i> Ödendi</span>
+                    <% else %><span class="label label-important"><i class="icon-remove-sign icon-white"></i> Ödenmedi</span><% end %>
+                  <% end %>
+                  <% if consult[:payment] %>
+                    <a class="btn btn-primary" href="/admin/consults/<%= consult[:id] %>/invoicepdf">
+                      <i class="icon-print icon-white"></i> Fatura
+                    </a>
+                  <% end %>
+                </td>
+              </tr>
+
             </tbody>
           </table>
+
+          <div class="form-actions">
+            <% if consult[:state] %>
+              <% if consult[:payment] %>
+                <a class="btn btn-danger" href="/admin/consults/<%= consult[:id] %>/payment">
+                  <i class="icon-shopping-cart icon-white"></i> Ödeme İptal Et
+                </a>
+              <% else %>
+                <a class="btn btn-primary" href="/admin/consults/<%= consult[:id] %>/payment">
+                  <i class="icon-shopping-cart icon-white"></i> Ödeme Yap
+                </a>
+              <% end %>
+            <% end %>
+          </div>
 
         </div>
         <div class="tab-pane" id="2">
 
-          <table class="table table-bordered">
+          <table class="table table-condensed">
             <thead>
               <tr>
                 <th>Bölüm</th>
                 <th>Doktor</th>
                 <th>Tarih</th>
                 <th>Saat</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              <% Consult.find_all_by_patient_id(patient[:id]).each do |consult| %>
+              <% patient.consults.each do |patient_consult| %>
                 <tr>
-                  <td><%= consult.doctor.department.name %></td>
-                  <td><%= consult.doctor.full_name %></td>
-                  <td><%= consult.day %></td>
-                  <td><%= consult.hour %></td>
+                  <td><%= patient_consult.doctor.department.name %></td>
+                  <td><%= patient_consult.doctor.full_name %></td>
+                  <td><%= patient_consult.day %></td>
+                  <td><%= patient_consult.hour %></td>
+                  <td>
+                    <a class="btn btn-primary" href="/admin/consults/<%= patient_consult[:id] %>">
+                      <i class="icon-eye-open icon-white"></i> İncele
+                    </a>
+                    <a class="btn btn-primary" href="/admin/consults/<%= patient_consult[:id] %>/invoicepdf">
+                      <i class="icon-print icon-white"></i> Fatura
+                    </a>
+                  </td>
                 </tr>
               <% end %>
             </tbody>
           </table>
 
         </div>
-      </div>
-    </div><!--/.tabbable -->
-  </div>
+        <div class="tab-pane" id="3">
 
-<% else %>
-  <center>
-    Böyle Bir Başvuru Bulunamadı
-  </center>
-<% end %>
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Test Ad</th>
+                <th>Adet</th>
+                <th>Durum</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% unless consult[:payment] or !consult[:state] %>
+
+                <% consult.trial_requests.each do |trial_request| %>
+
+                  <% unless invoice = Invoice.find_by_consult_id_and_product_id_and_product_type(trial_request[:consult_id],
+                                                                                                 trial_request[:trial_type_id],
+                                                                                                 false) %>
+
+                    <tr>
+                      <td><%= trial_request[:id] %></td>
+                      <td><%= trial_request.trial_type.name %></td>
+
+                      <form action="/admin/trial_requests/update" method="post" class="">
+                        <td><input type="text" class="input-mini" name="sequence" value="<%= trial_request[:sequence] %>"></td>
+                        <td>
+                          <% if trial_request[:state] %>
+                            <span class="label label-success"><i class="icon-check icon-white"></i> Onaylı</span>
+                          <% else %>
+                            <span class="label label-info"><i class="icon-share icon-white"></i> Taslak</span>
+                          <% end %>
+                        </td>
+                        <td><button type="submit" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Güncelle</button>
+                          <a class="btn btn-danger" href="/admin/trial_requests/<%= trial_request[:id] %>/destroy" rel="tooltip"
+                            title="Sil" onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">
+                            <i class="icon-trash icon-white"></i> Sil
+                          </a>
+                        </td>
+
+                        <input type="hidden" name="id" value="<%= trial_request[:id] %>">    <!-- #FIXME -->
+                      </form>
+
+                      <td>
+                        <a class="btn btn-primary" href="/admin/trial_requests/<%= trial_request[:id] %>" rel="tooltip"
+                          title="Cevapla">
+                          <i class="icon-retweet icon-white"></i> Cevapla
+                        </a>
+                      </td>
+
+                      <form action="/admin/invoices" method="post" class="">
+                        <input type="hidden" name="sequence" value="<%= trial_request[:sequence] %>"><!-- #FIXME -->
+                        <input type="hidden" name="consult_id" value="<%= consult[:id] %>"><!-- #FIXME -->
+                        <input type="hidden" name="product_id" value="<%= trial_request[:trial_type_id] %>">  <!-- #FIXME -->
+                        <input type="hidden" name="product_type" value="0">               <!-- #FIXME -->
+                        <input type="hidden" name="price" value="<%= trial_request.trial_type.price %>">    <!-- #FIXME -->
+                        <td class="links">
+                          <button type="submit" class="btn btn-success"><i class="icon-shopping-cart icon-white"></i> Ekle</button>
+                        </td>
+                      </form>
+                    </tr>
+
+                  <% else %>
+
+                    <tr>
+                      <td><%= trial_request[:id] %></td>
+                      <td><%= trial_request.trial_type.name %></td>
+                      <td><%= trial_request[:sequence] %></td>
+                      <td>
+                        <% if trial_request[:state] %>
+                          <span class="label label-success"><i class="icon-check icon-white"></i> Onaylı</span>
+                        <% else %>
+                          <span class="label label-info"><i class="icon-share icon-white"></i> Taslak</span>
+                        <% end %>
+                      </td>
+                      <td>
+                        <a class="btn btn-danger" href="/admin/invoices/<%= invoice[:id] %>/destroy"
+                          onclick="return confirm('Gerçekten düzenlemek istiyor musunuz?')">
+                          <i class="icon-pencil icon-white"></i> Düzenle
+                        </a>
+                        <a class="btn btn-primary"
+                          href="/admin/consults/<%= "#{consult[:id]}/#{trial_request[:trial_type_id]}" %>/trialtypepdf">
+                          <i class="icon-print icon-white"></i> Sonuçlar
+                        </a>
+                      </td>
+                    </tr>
+
+                  <% end %>
+                <% end %>
+
+              <% else %>
+
+                <% consult.trial_requests.each do |trial_request| %>
+                  <tr>
+                    <td><%= trial_request[:id] %></td>
+                    <td><%= trial_request.trial_type.name %></td>
+                    <td><%= trial_request[:sequence] %></td>
+                    <td>
+                      <% if trial_request[:state] %>
+                        <span class="label label-success"><i class="icon-check icon-white"></i> Onaylı</span>
+                      <% else %>
+                        <span class="label label-info"><i class="icon-share icon-white"></i> Taslak</span>
+                      <% end %>
+                    </td>
+                    <td>
+                      <a class="btn btn-primary"
+                        href="/admin/consults/<%= "#{consult[:id]}/#{trial_request[:trial_type_id]}" %>/trialtypepdf">
+                        <i class="icon-print icon-white"></i> Sonuçlar
+                      </a>
+                    </td>
+                  </tr>
+                <% end %>
+
+              <% end %>
+            </tbody>
+          </table>
+
+        </div>
+        <div class="tab-pane" id="4">
+
+          <table class="table table-condensed">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>İsim</th>
+                <th>S.K.T</th>
+                <th>Adet</th>
+                <th>Başlama Tarihi</th>
+                <th>Bitirme Tarihi</th>
+                <th>İçerik</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% unless consult[:payment] or !consult[:state] %>
+
+                <% consult.drug_requests.each do |drug_request| %>
+
+                  <% unless invoice = Invoice.find_by_consult_id_and_product_id_and_product_type(drug_request[:consult_id],
+                                                                                                 drug_request[:drug_id],
+                                                                                                 true) %>
+
+                    <tr>
+                      <td><%= drug_request[:id] %></td>
+                      <td><%= drug_request.drug.name %></td>
+                      <td><%= drug_request.drug.expiry_date %></td>
+
+                      <form action="/admin/drug_uses/update" method="post" class="">
+                        <td><input type="text" class="input-mini" name="sequence" value="<%= drug_request[:sequence] %>"></td>
+                        <td>
+                          <input type="text" class="input-small" name="start_time" placeholder="Başlama Tarihi"
+                          data-datepicker="datepicker" value="<%= drug_request.start_time %>">
+                        </td>
+                        <td>
+                          <input type="text" class="input-small" name="end_time" placeholder="Bitirme Tarihi"
+                          data-datepicker="datepicker" value="<%= drug_request.end_time %>">
+                        </td>
+                        <td>
+                          <textarea rows="2" class="input-medium" name="content"><%= drug_request[:content] %></textarea>
+                        </td>
+                        <input type="hidden" name="id" value="<%= drug_request[:id] %>">    <!-- #FIXME -->
+                        <td><button type="submit" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Güncelle</button>
+                          <a class="btn btn-danger" href="/admin/drug_uses/<%= drug_request[:id] %>/destroy" rel="tooltip"
+                            title="Sil" onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">
+                            <i class="icon-trash icon-white"></i> Sil
+                          </a>
+                        </td>
+                      </form>
+
+                      <form action="/admin/invoices" method="post" class="">
+                        <input type="hidden" name="sequence" value="<%= drug_request[:sequence] %>"><!-- #FIXME -->
+                        <input type="hidden" name="consult_id" value="<%= consult[:id] %>"><!-- #FIXME -->
+                        <input type="hidden" name="product_id" value="<%= drug_request[:drug_id] %>">  <!-- #FIXME -->
+                        <input type="hidden" name="product_type" value="1">               <!-- #FIXME -->
+                        <input type="hidden" name="price" value="<%= drug_request.drug.price %>">    <!-- #FIXME -->
+                        <td class="links">
+                          <button type="submit" class="btn btn-success"><i class="icon-shopping-cart icon-white"></i> Ekle</button>
+                        </td>
+                      </form>
+                    </tr>
+
+                  <% else %>
+
+                    <tr>
+                      <td><%= drug_request[:id] %></td>
+                      <td><%= drug_request.drug.name %></td>
+                      <td><%= drug_request.drug.expiry_date %></td>
+                      <td><input type="text" class="input-mini" value="<%= drug_request[:sequence] %>" disabled></td>
+                      <td><input type="text" class="input-small" value="<%= drug_request[:start_time] %>" disabled></td>
+                      <td><input type="text" class="input-small" value="<%= drug_request[:end_time] %>" disabled></td>
+                      <td><textarea rows="2" class="input-medium" disabled><%= drug_request[:content] %></textarea></td>
+                      <td class="links">
+                        <a class="btn btn-danger" href="/admin/invoices/<%= invoice[:id] %>/destroy"
+                          onclick="return confirm('Gerçekten düzenlemek istiyor musunuz?')">
+                          <i class="icon-pencil icon-white"></i> Düzenle
+                        </a>
+                      </td>
+                    </tr>
+
+                  <% end %>
+
+                <% end %>
+
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td>
+                    <a class="btn btn-primary" href="/admin/consults/<%= consult[:id] %>/drugspdf">
+                      <i class="icon-print icon-white"></i> İlaç Kullanımları
+                    </a>
+                  </td>
+                </tr>
+
+              <% else %>
+
+                <% consult.drug_requests.each do |drug_request| %>
+                  <tr>
+                    <td><%= drug_request[:id] %></td>
+                    <td><%= drug_request.drug.name %></td>
+                    <td><%= drug_request.drug.expiry_date %></td>
+                    <td><input type="text" class="input-mini" value="<%= drug_request[:sequence] %>" disabled></td>
+                    <td><input type="text" class="input-small" value="<%= drug_request[:start_time] %>" disabled></td>
+                    <td><input type="text" class="input-small" value="<%= drug_request[:end_time] %>" disabled></td>
+                    <td><textarea rows="2" class="input-medium" disabled><%= drug_request[:content] %></textarea>
+                    </tr>
+
+                  <% end %>
+
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <a class="btn btn-primary" href="/admin/consults/<%= consult[:id] %>/drugspdf">
+                        <i class="icon-print icon-white"></i> İlaç Kullanımları
+                      </a>
+                    </td>
+                  </tr>
+
+                <% end %>
+                </tbody>
+              </table>
+
+            </div>
+          </div><!--/.tabbable -->
+        </div>
+      </div>
+
+    <% else %>
+      <center>
+        Böyle Bir Randevu Bulunamadı
+      </center>
+    <% end %>

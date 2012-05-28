@@ -1,20 +1,20 @@
-id,name,content,price
-1,Abelcet IV,,100
-2,acerilin,,50
-3,Actrapid HM Penfill,,125
-4,Acuitel,,110
-5,Acular,,40
-6,Acyl,,50
-7,Adafen,,60
-8,Adalat  Crono,,100
-9,Adant,,120
-10,Adepiron,,40
-11,Adrenalin,,110
-12,Adriblastina,,70
-13,Advantan,,80
-14,Aerius,,120
-15,Aerodiol,,50
-16,Aethoxysklerol,,60
-17,Aferin,,80
-18,Afro,,125
-19,Agen,,30
+id,name,content,price,expiry_date
+1,Abelcet IV,,100,2013-01-01
+2,Acerilin,,50,2013-01-01
+3,Actrapid HM Penfill,,125,2013-01-01
+4,Acuitel,,110,2013-01-01
+5,Acular,,40,2013-01-01
+6,Acyl,,50,2013-01-01
+7,Adafen,,60,2013-01-01
+8,Adalat  Crono,,100,2013-01-01
+9,Adant,,120,2013-01-01
+10,Adepiron,,40,2013-01-01
+11,Adrenalin,,110,2013-01-01
+12,Adriblastina,,70,2013-01-01
+13,Advantan,,80,2013-01-01
+14,Aerius,,120,2013-01-01
+15,Aerodiol,,50,2013-01-01
+16,Aethoxysklerol,,60,2013-01-01
+17,Aferin,,80,2013-01-01
+18,Afro,,125,2013-01-01
+19,Agen,,30,2013-01-01

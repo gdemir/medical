@@ -1,8 +1,9 @@
 <%= render :partial => "admin/consults/sort" %>
-
 <%
-  doctor_ids = if params[:department_id] and params[:department_id] != ""
-                 if params[:doctor_id] and params[:doctor_id] != ""
+  consults = Consult
+
+  doctor_ids = if params[:department_id] and !params[:department_id].empty?
+                 if params[:doctor_id] and !params[:doctor_id].empty?
                    params[:doctor_id]
                  else
                    Department.find(params[:department_id]).doctor.select(:id)
@@ -11,50 +12,79 @@
                  Doctor.select(:id).all
                end
 
-  consults = if params[:date] and params[:date] != ""
-               Consult.where("doctor_id" => doctor_ids).where("date like ?", "#{params[:date]}%")
-             else
-               Consult.where("doctor_id" => doctor_ids).where("date >=? ", consult_days[0])
-             end
+  if doctor_ids
+    consults = consults.where("doctor_id" => doctor_ids)
+  end
+
+  if params[:tc] and !params[:tc].empty?
+    consults = consults.joins(:patient).where("patients.tc like ?", "#{params[:tc]}%")
+  end
+
+  if params[:first_name] and !params[:first_name].empty?
+    consults = consults.joins(:patient).where("patients.first_name like ?", "#{params[:first_name]}%")
+  end
+
+  if params[:last_name] and !params[:last_name].empty?
+    consults = consults.joins(:patient).where("patients.last_name like ?", "#{params[:last_name]}%")
+  end
+
+  if params[:date] and !params[:date].empty?
+    consults = consults.where("date like ?", "#{params[:date]}%")
+  else
+    consults = consults.where("date >=? ", consult_days[0]).where("date <=? ", consult_days[1])
+  end
 %>
 
 <% if consults.count > 0 %>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Hasta</th>
-        <th>Bölüm</th>
-        <th>Doktor</th>
-        <th>Tarih</th>
-        <th>Saat</th>
-        <th>Ödeme</th>
-        <!--<th>Ekleme Tarihi</th>
-        <th>Güncelleme Tarihi</th>-->
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <% consults.each do |consult| %>
+
+  <div data-spy="scroll" data-offset="0" class="scrollspy2">
+    <table class="table table-condensed">
+      <thead>
         <tr>
-          <td><%= consult[:id] %></td>
-          <td><%= consult.patient.full_name %></td>
-          <td><%= consult.doctor.department.name %></td>
-          <td><%= consult.doctor.full_name %></td>
-          <td><%= consult.day %></td>
-          <td><%= consult.hour %></td>
-          <td><span class="label label-<%= consult[:status] ? "success" : "important"%>"><%= consult[:status] ? "o" : "x"%></span></td>
-          <!--<td><%= consult[:created_at] %></td>
-          <td><%= consult[:updated_at] %></td>-->
-          <td class="links">
-            <a href="/<%= request[:controller] %>/<%= consult[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
-            <a href="/<%= request[:controller] %>/<%= consult[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
-              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
-          </td>
+          <th>#</th>
+          <th>Tc</th>
+          <th>Ad</th>
+          <th>Soyad</th>
+          <th>Bölüm</th>
+          <th>Doktor</th>
+          <th>Tarih</th>
+          <th>Saat</th>
+          <th>Cevap</th>
+          <th>Ödeme</th>
+          <th>İşlem</th>
+          <th></th>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <% consults.each do |consult| %>
+          <tr>
+            <td><%= consult[:id] %></td>
+            <td><%= consult.patient.tc %></td>
+            <td><%= consult.patient.first_name %></td>
+            <td><%= consult.patient.last_name %></td>
+            <td><%= consult.doctor.department.name %></td>
+            <td><%= consult.doctor.full_name %></td>
+            <td><%= consult.day_and_weekday %></td>
+            <td><%= consult.hour %></td>
+            <td><% if admin = Admin.find_by_id(consult[:reply_admin_id]) %><%= admin.full_name %><% end %></td>
+            <td>
+              <% if consult[:payment] %><span class="label label-success"><i class="icon-ok-sign icon-white"></i></span>
+              <% else %><span class="label label-important"><i class="icon-remove-sign icon-white"></i></span><% end %>
+            </td>
+            <td>
+              <% if consult[:state] %><span class="label label-success"><i class="icon-ok-sign icon-white"></i> Açık</span>
+              <% else %><span class="label label-important"><i class="icon-remove-sign icon-white"></i> Kapalı</span><% end %>
+            </td>
+            <td class="links">
+              <a href="/<%= request[:controller] %>/<%= consult[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
+              <a href="/<%= request[:controller] %>/<%= consult[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+                onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 <% else %>
   <center>
     Hiç Kayıt Bulunamadı

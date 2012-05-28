@@ -1,8 +1,8 @@
 <% if session[:patient] %>
-  <% consults = Consult.where("patient_id", session[:patient][:id]).where("date >=? ", consult_days[0]) %>
+  <% consults = session[:patient].new_consults %>
 
   <% if consults != [] %>
-    <div data-spy="scroll" data-offset="0" class="scrollspy">
+    <div data-spy="scroll" data-offset="0" class="scrollspy1">
       <table class="table table-bordered">
         <thead>
           <tr>
@@ -18,11 +18,11 @@
             <tr>
               <td><%= consult.doctor.department.name %></td>
               <td><%= consult.doctor.full_name %></td>
-              <td><%= consult.day %></td>
+              <td><%= consult.day_and_weekday %></td>
               <td><%= consult.hour %></td>
               <td>
                 <a class="btn btn-danger" onClick="return confirm('Silmek istediğinizden emin misiniz ?');"
-                  href="/home/consult_destroy/<%= consult.id.to_s+"/"+consult.patient_id.to_s %>">
+                  href="/home/consult_destroy/<%= "#{consult[:id]}/#{consult[:patient_id]}" %>">
                   İptal Et
                 </a>
               </td>

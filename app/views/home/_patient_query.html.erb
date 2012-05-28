@@ -1,9 +1,12 @@
-<center>
-  <form action="/home/patient_query" method="post" class="well form-inline">
+<form action="/home/patient_query" method="post" class="well form-inline">
+
     <input type="text" name="tc" placeholder="Tc Kimlik No" value="<%= session[:patient][:tc] if session[:patient] %>">
-    <input type="text" name="birthday" placeholder="Doğum Tarihi" value="<%= session[:patient][:birthday] if session[:patient] %>">
+
+    <input type="text" name="birthday" placeholder="Doğum Tarihi" data-datepicker="datepicker"
+    value="<%= session[:patient] ? session[:patient][:birthday] : "" %>">
+
     <input type="text" name="birthplace" placeholder="Doğum Yeri" value="<%= session[:patient][:birthplace] if session[:patient] %>">
     <input type="hidden" name="before_place" value="<%= File.basename(request.fullpath).include?("consult_register") ? 0 : 1 %>">
     <button type="submit" class="btn btn-primary">Sorgula</button>
-  </form>
-</center>
+
+</form>

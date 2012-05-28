@@ -49,6 +49,7 @@ class Admin::TrialsController < ApplicationController
   def destroy
     trial = Trial.find(params[:trial_id])
     trial_type_id = trial[:trial_type_id]
+
     if trial.delete
       flash[:success] = "Kayıt Silindi"
     else

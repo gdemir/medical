@@ -51,8 +51,8 @@
             <th>Min Range</th>
             <th>Max Range</th>
             <th>Units</th>
-            <th>Eklenen Tarih</th>
-            <th>Güncellenen Tarih</th>
+            <!--<th>Eklenen Tarih</th>
+            <th>Güncellenen Tarih</th>-->
             <th></th>
           </tr>
         </thead>
@@ -67,8 +67,8 @@
                 <td><input type="text" class="input-mini" name="min_range" value="<%= trial[:min_range] %>"></td>
                 <td><input type="text" class="input-mini" name="max_range" value="<%= trial[:max_range] %>"></td>
                 <td><input type="text" class="input-mini" name="units" value="<%= trial[:units] %>"></td>
-                <td><%= trial[:created_at] %></td>
-                <td><%= trial[:updated_at] %></td>
+                <!--<td><%= trial[:created_at] %></td>
+                <td><%= trial[:updated_at] %></td>-->
                 <td class="links">
                   <button type="submit" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Güncelle</button>
                   <a class="btn btn-danger" href="/admin/trials/<%= trial[:id] %>/destroy"

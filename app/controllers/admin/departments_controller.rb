@@ -2,7 +2,7 @@
 class Admin::DepartmentsController < ApplicationController
 
   include ApplicationHelper
-  before_filter :require_admin
+  before_filter :require_superadmin
 
   def index
   end
@@ -21,8 +21,8 @@ class Admin::DepartmentsController < ApplicationController
       :name => params[:name],
     })
     department.save
-    flash[:success] = "İlaç eklendi"
-    redirect_to "/admin/departments/#{department.id}"
+    flash[:success] = "Bölüm eklendi"
+    redirect_to "/admin/departments/#{department[:id]}"
   end
 
   def update
@@ -35,7 +35,7 @@ class Admin::DepartmentsController < ApplicationController
     else
       flash[:error] = "Bölüm Güncellenemedi."
     end
-    redirect_to "/admin/departments/#{department.id}"
+    redirect_to "/admin/departments/#{department[:id]}"
   end
 
   def destroy

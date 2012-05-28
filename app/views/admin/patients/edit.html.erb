@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="input02">File no (*)</label>
+        <label class="control-label" for="input02">Dosya no (*)</label>
         <div class="controls">
           <input type="text" class="input-xlarge" id="input02" name="file_no" value="<%= patient[:file_no] %>">
         </div>
@@ -30,8 +30,7 @@
         <label class="control-label">Cinsiyet</label>
         <div class="controls">
           <label class="radio">
-
-              <input type="radio" name="gender" id="optionsRadios1" value="1" <%= "checked" if patient[:gender] %>>
+            <input type="radio" name="gender" id="optionsRadios1" value="1" <%= "checked" if patient[:gender] %>>
             <span class="label label-info">Erkek</span>
           </label>
           <label class="radio">
@@ -67,7 +66,8 @@
       <div class="control-group">
         <label class="control-label" for="input06">Doğum Tarihi (*)</label>
         <div class="controls">
-          <input type="text" class="input-xlarge" id="input06" name="birthday" value="<%= patient[:birthday] %>">
+          <input type="text" class="input-xlarge" id="input06" name="birthday"
+          data-datepicker="datepicker" value="<%= patient[:birthday] %>">
         </div>
       </div>
       <div class="control-group">
@@ -77,19 +77,35 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label">ssk</label>
+        <label class="control-label" for="input08">Kan Grup (*)</label>
         <div class="controls">
-          <label class="radio">
-            <input type="radio" name="insurance" id="optionsRadios1" value="1" <%= "checked" if patient[:insurance] %>>
-            Var
-          </label>
-          <label class="radio">
-            <input type="radio" name="insurance" id="optionsRadios2" value="0" <%= "checked" unless patient[:insurance] %>>
-            Yok
-          </label>
+          <select id="input08" class="input-xlarge" name="blood_group_id">
+            <% BloodGroup.all.each do |blood_group| %>
+              <option value="<%= blood_group[:id] %>" <%= 'selected' if blood_group[:id] == patient[:blood_group_id].to_i %>>
+              <%= blood_group[:name] %>
+              </option>
+            <% end %>
+          </select>
         </div>
       </div>
-
+      <div class="control-group">
+        <label class="control-label" for="input09">Adres (*)</label>
+        <div class="controls">
+          <textarea rows="4" class="input-xlarge" id="input09" name="adress"><%= patient[:adress] %></textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input10">Anne Ad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input10" name="mother_name" value="<%= patient[:mother_name] %>">
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input11">Baba Ad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input11" name="father_name" value="<%= patient[:father_name] %>">
+        </div>
+      </div>
       <input type="hidden" name="id" value="<%= patient[:id] %>"><!-- #FIXME -->
     </fieldset>
 

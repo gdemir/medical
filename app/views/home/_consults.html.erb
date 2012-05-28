@@ -1,7 +1,7 @@
 <% if session[:patient] and session[:department] and session[:doctor] %>
   <% begin_min, end_min, examination_min = consult_times %>
 
-  <div data-spy="scroll" data-offset="0" class="scrollspy">
+  <div data-spy="scroll" data-offset="0" class="scrollspy1">
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -25,10 +25,10 @@
                 <td><%= "#{day} #{turkish_day(day.wday)}" %></td>
                 <td><%= hour %></td>
                 <% if Consult.find_by_doctor_id_and_date(session[:doctor][:id], "#{day} #{hour}") %>
-                  <td><span class="label label-important">x</span></td>
+                  <td><span class="label label-important"><i class="icon-remove icon-white"></i></span></td>
                   <td><span class="label label-info">Dolu</span></td>
                 <% else %>
-                  <td><span class="label label-success">o</span></td>
+                  <td><span class="label label-success"><i class="icon-ok icon-white"></i></span></td>
                   <td><button type="submit" class="btn btn-success">Randevu Al</button></td>
                 <% end %>
               </tr>

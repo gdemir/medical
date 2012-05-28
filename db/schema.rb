@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120508133117) do
+ActiveRecord::Schema.define(:version => 20120525075509) do
 
   create_table "admins", :force => true do |t|
     t.string   "first_name"
@@ -23,11 +23,19 @@ ActiveRecord::Schema.define(:version => 20120508133117) do
     t.datetime "updated_at"
   end
 
+  create_table "blood_groups", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "consults", :force => true do |t|
     t.integer  "patient_id"
     t.integer  "doctor_id"
     t.datetime "date"
+    t.integer  "reply_admin_id"
     t.boolean  "payment"
+    t.boolean  "state"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -46,9 +54,28 @@ ActiveRecord::Schema.define(:version => 20120508133117) do
     t.datetime "updated_at"
   end
 
+  create_table "drug_storages", :force => true do |t|
+    t.integer  "drug_id"
+    t.integer  "sequence"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "drug_uses", :force => true do |t|
+    t.integer  "consult_id"
+    t.integer  "drug_id"
+    t.integer  "sequence"
+    t.text     "content"
+    t.date     "start_time"
+    t.date     "end_time"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "drugs", :force => true do |t|
     t.string   "name"
     t.text     "content"
+    t.date     "expiry_date"
     t.integer  "price"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -58,12 +85,14 @@ ActiveRecord::Schema.define(:version => 20120508133117) do
     t.integer  "consult_id"
     t.integer  "product_id"
     t.boolean  "product_type"
+    t.integer  "sequence"
     t.integer  "price"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "patients", :force => true do |t|
+    t.integer  "blood_group_id"
     t.string   "tc"
     t.integer  "file_no"
     t.string   "first_name"
@@ -71,18 +100,12 @@ ActiveRecord::Schema.define(:version => 20120508133117) do
     t.boolean  "gender"
     t.integer  "phone"
     t.string   "email"
+    t.text     "adress"
     t.string   "image_url"
     t.date     "birthday"
     t.string   "birthplace"
-    t.boolean  "insurance"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "trial_histories", :force => true do |t|
-    t.integer  "trial_request_id"
-    t.integer  "request_admin_id"
-    t.integer  "reply_admin_id"
+    t.string   "mother_name"
+    t.string   "father_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -90,6 +113,9 @@ ActiveRecord::Schema.define(:version => 20120508133117) do
   create_table "trial_requests", :force => true do |t|
     t.integer  "consult_id"
     t.integer  "trial_type_id"
+    t.integer  "request_admin_id"
+    t.integer  "reply_admin_id"
+    t.integer  "sequence"
     t.boolean  "state"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -97,11 +123,17 @@ ActiveRecord::Schema.define(:version => 20120508133117) do
 
   create_table "trial_results", :force => true do |t|
     t.integer  "trial_request_id"
-    t.integer  "sequence"
     t.integer  "trial_id"
     t.integer  "min_range"
     t.integer  "max_range"
     t.integer  "result"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "trial_storages", :force => true do |t|
+    t.integer  "trial_type_id"
+    t.integer  "sequence"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

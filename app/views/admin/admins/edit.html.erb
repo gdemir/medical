@@ -1,7 +1,7 @@
 <% if admin = Admin.find(params[:id]) %>
   <form action="/admin/admins/update" method="post" enctype="multipart/form-data" class="form-horizontal" >
     <fieldset>
-      <legend>Hasta Düzenle</legend>
+      <legend>Admin Düzenle</legend>
       <div class="control-group">
         <label class="control-label" for="input03">Ad (*)</label>
         <div class="controls">
@@ -30,11 +30,19 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="input06">Doğum Tarihi (*)</label>
+        <label class="control-label">Grup</label>
         <div class="controls">
-          <input type="text" class="input-xlarge" id="input06" name="status" value="<%= admin[:status] %>">
+          <label class="radio">
+            <input type="radio" name="status" id="optionsRadios1" value="1" <%= "checked" if admin[:status] == 1 %>>
+            <span class="label label-info">Admin</span>
+          </label>
+          <label class="radio">
+            <input type="radio" name="status" id="optionsRadios2" value="0" <%= "checked" if admin[:status] == 0 %>>
+            <span class="label label-important">Personel</span>
+          </label>
         </div>
       </div>
+
 
       <input type="hidden" name="id" value="<%= admin[:id] %>"><!-- #FIXME -->
     </fieldset>

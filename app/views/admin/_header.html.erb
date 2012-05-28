@@ -2,7 +2,7 @@
   <ul class="nav nav-pills">
     <li class="active"><a href="/admin">Anasayfa</a></li>
     <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Başvuru<b class="caret"></b></a>
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Randevu<b class="caret"></b></a>
     <ul id="menu1" class="dropdown-menu">
       <li><a href="/admin/consults"><span class="label label-warning">Yeni</span> Listele</a></li>
       <li class="divider"></li>
@@ -15,18 +15,8 @@
       <li><a href="/admin/trial_types/new">Yeni</a></li>
       <li><a href="/admin/trial_types">Listele</a></li>
       <li class="divider"></li>
-      <li class="nav-header">Test</li>
-      <li><a href="#">İste</a></li>
-      <li><a href="#">İstekler</a></li>
-      <li><a href="#">Sonuçlar</a></li>
-      <li><a href="#">Geçmiş</a></li>
-    </ul>
-    </li>
-    <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Fatura<b class="caret"></b></a>
-    <ul id="menu2" class="dropdown-menu">
-      <li><a href="#">Yeni</a></li>
-      <li><a href="#">Listele</a></li>
+      <li><a href="/admin/trial_requests"><span class="label label-warning">Yeni</span> İstekler/Sonuçlar</a></li>
+      <li><a href="/admin/trial_requests/all"><span class="label">Tüm</span> İstekler/Sonuçlar</a></li>
     </ul>
     </li>
     <li class="dropdown">
@@ -37,20 +27,6 @@
     </ul>
     </li>
     <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Bölüm<b class="caret"></b></a>
-    <ul id="menu3" class="dropdown-menu">
-      <li><a href="/admin/departments/new">Yeni</a></li>
-      <li><a href="/admin/departments">Listele</a></li>
-    </ul>
-    </li>
-    <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Doktor<b class="caret"></b></a>
-    <ul id="menu3" class="dropdown-menu">
-      <li><a href="/admin/doctors/new">Yeni</a></li>
-      <li><a href="/admin/doctors">Listele</a></li>
-    </ul>
-    </li>
-    <li class="dropdown">
     <a class="dropdown-toggle" data-toggle="dropdown" href="#">İlaç<b class="caret"></b></a>
     <ul id="menu3" class="dropdown-menu">
       <li><a href="/admin/drugs/new">Yeni</a></li>
@@ -58,11 +34,46 @@
     </ul>
     </li>
     <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin<b class="caret"></b></a>
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Depo<b class="caret"></b></a>
     <ul id="menu3" class="dropdown-menu">
-      <li><a href="/admin/admins/new">Yeni</a></li>
-      <li><a href="/admin/admins">Listele</a></li>
+      <li><a href="/admin/trial_storages">Test Tipi</a></li>
+      <li><a href="/admin/drug_storages">İlaç</a></li>
     </ul>
+    </li>
+    <li>
+    <a href="/admin/invoices">Fatura</a>
+    </li>
+    <% if session[:superadmin] %>
+
+      <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">Bölüm<b class="caret"></b></a>
+      <ul id="menu3" class="dropdown-menu">
+        <li><a href="/admin/departments/new">Yeni</a></li>
+        <li><a href="/admin/departments">Listele</a></li>
+      </ul>
+      </li>
+      <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">Doktor<b class="caret"></b></a>
+      <ul id="menu3" class="dropdown-menu">
+        <li><a href="/admin/doctors/new">Yeni</a></li>
+        <li><a href="/admin/doctors">Listele</a></li>
+      </ul>
+      </li>
+
+      <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">Admin<b class="caret"></b></a>
+      <ul id="menu3" class="dropdown-menu">
+        <li><a href="/admin/admins/new">Yeni</a></li>
+        <li><a href="/admin/admins">Listele</a></li>
+      </ul>
+      </li>
+      <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#">Kan Grup<b class="caret"></b></a>
+      <ul id="menu3" class="dropdown-menu">
+        <li><a href="/admin/blood_groups/new">Yeni</a></li>
+        <li><a href="/admin/blood_groups">Listele</a></li>
+      </ul>
+    <% end %>
     </li>
   </ul> <!-- /tabs -->
 <% end %>

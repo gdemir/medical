@@ -7,3 +7,5 @@ satırını
         /assets/
 
 olarak güncellemelisin.
+
+s/..\/img/\/assets/gc

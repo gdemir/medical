@@ -1,20 +1,67 @@
 <section id="#">
 <div class="page-header">
-  <h1>Başvuru <small>(<%= File.basename request.path %>)</small></h1>
+  <h1>Randevular <small>(<%= File.basename request.path %>)</small></h1>
 </div>
 <div class="row">
   <div class="span3 columns">
     <h3>Hakkında</h3>
-    <p>Yandaki belli kıstaslar ile sıralama yapabilirsiniz.</p>
+    <p>Yeni randevu istekleridir.</p>
   </div>
   <div class="span9 columns">
     <h2>Sıralama</h2>
 
     <form action="<%= request.path %>" method="get" class="form-inline" >
+      <div class="span9">
+        <p>Sıralama işlemini aşağıdaki kutuları kullanarak yapabilirsiniz.</p>
 
-      <div class="span2.5">
-        <div class="thumbnail">
-          <div class="caption">
+        <ul class="thumbnails">
+
+          <li class="span2.5">
+          <div class="thumbnail caption">
+            <h5>Tc</h5>
+
+            <input type="text" class="input-small" name="tc" value="<%= params[:tc] %>" onchange='this.form.submit()'>
+
+          </div>
+          </li>
+
+          <li class="span2.5">
+          <div class="thumbnail caption">
+            <h5>Ad</h5>
+
+            <input type="text" class="input-small" name="first_name" value="<%= params[:first_name] %>" onchange='this.form.submit()'>
+
+          </div>
+          </li>
+
+          <li class="span2.5">
+          <div class="thumbnail caption">
+            <h5>Soyad</h5>
+
+            <input type="text" class="input-small" name="last_name" value="<%= params[:last_name] %>" onchange='this.form.submit()'>
+
+          </div>
+          </li>
+
+          <li class="span2.5">
+          <div class="thumbnail caption">
+
+            <h5>Gün</h5>
+
+            <select class="input-medium" name="date" onchange='this.form.submit()'>
+              <option value=""></option>
+              <% consult_days.each do |day| %>
+                <option value="<%= day %>" <%= 'selected' if day.to_s == params[:date] %>>
+                <%= "#{day} #{turkish_day(day.wday)}"%>
+                </option>
+              <% end %>
+            </select>
+          </div>
+          </li>
+
+          <li class="span2.5">
+          <div class="thumbnail caption">
+
             <h5>Bölüm</h5>
 
             <select class="input-medium" name="department_id" onchange='this.form.submit()'>
@@ -27,12 +74,10 @@
             </select>
 
           </div>
-        </div>
-      </div>
+          </li>
 
-      <div class="span2.5">
-        <div class="thumbnail">
-          <div class="caption">
+          <li class="span2.5">
+          <div class="thumbnail caption">
             <h5>Doktor</h5>
 
             <select class="input-medium" name="doctor_id" onchange='this.form.submit()'>
@@ -47,25 +92,10 @@
             </select>
 
           </div>
-        </div>
-      </div>
+          </li>
 
-      <div class="span2.5">
-        <div class="thumbnail">
-          <div class="caption">
-            <h5>Gün</h5>
 
-            <select class="input-medium" name="date" onchange='this.form.submit()'>
-              <option value=""></option>
-              <% consult_days.each do |day| %>
-                <option value="<%= day %>" <%= 'selected' if day.to_s == params[:date] %>>
-                <%= "#{day} #{turkish_day(day.wday)}"%>
-                </option>
-              <% end %>
-            </select>
-
-          </div>
-        </div>
+        </ul>
       </div>
     </form>
 

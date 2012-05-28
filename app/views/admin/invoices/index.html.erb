@@ -1,47 +1,67 @@
-<% invoices = Invoice.all %>
+<%= render :partial => "admin/invoices/sort" %>
+<%
+  invoices = Invoice
 
-<% if invoices.count > 0 %>
-  <div class="well"><h5>İlaçlar</h5></div>
-  <table class="table">
-    <thead>
+  if params[:start_date] and !params[:start_date].empty?
+    invoices = invoices.where("created_at >=? ", params[:start_date])
+  end
+
+  if params[:end_date] and !params[:end_date].empty?
+    invoices = invoices.where("created_at <=? ", params[:end_date])
+  end
+
+  invoices = invoices.group("product_id, product_type")
+
+%>
+
+<table class="table table-condensed">
+  <thead>
+    <tr>
+      <th>Ürün</th>
+      <th>Adet</th>
+      <th>Ortalama Fiyat</th>
+      <th>Gelir</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% invoices.each do |invoice| %>
       <tr>
-        <th>#</th>
-        <th>Ad</th>
-        <th>İçerik</th>
-        <th>Fiyat</th>
-        <th>Eklenen Tarih</th>
-        <th>Güncellenen Tarih</th>
-        <th></th>
+        <% if invoice[:product_type] %><td><%= Drug.find(invoice[:product_id]).name %></td>
+        <% else %><td><%= TrialType.find(invoice[:product_id]).name %></td>
+        <% end %>
+        <% if params[:start_date] and !params[:start_date].empty? and params[:end_date] and !params[:end_date].empty? %>
+            <% products = Invoice.find(:all, :conditions =>
+                                          ["product_id = ? and product_type = ? and created_at >= ? and created_at <= ?",
+                                          invoice[:product_id], invoice[:product_type], params[:start_date], params[:end_date]])
+                                        %>
+        <% end %>
+        <% if params[:start_date] and !params[:start_date].empty? %>
+          <% products = Invoice.find(:all, :conditions =>
+                                        ["product_id = ? and product_type = ? and created_at >= ?",
+                                        invoice[:product_id], invoice[:product_type], params[:start_date]])
+                                      %>
+        <% end %>
+        <% if params[:end_date] and !params[:end_date].empty? %>
+          <% products = Invoice.find(:all, :conditions =>
+                                        ["product_id = ? and product_type = ? and created_at <= ?",
+                                        invoice[:product_id], invoice[:product_type], params[:end_date]])
+                                      %>
+        <% end %>
+        <% products = Invoice.find_all_by_product_id_and_product_type(invoice[:product_id],invoice[:product_type]) unless products %>
+        <td><%= products.sum(&:sequence) %></td>
+        <td><%= products.sum(&:price) / products.count %></td>
+        <td><%= products.sum { |product| product[:price] * product[:sequence] } %></td>
       </tr>
-    </thead>
-    <tbody>
-      <% invoices.each do |invoice| %>
-        <tr>
-          <td><%= invoice[:id] %></td>
-          <td><%= invoice[:name] %></td>
-          <td><%= invoice[:content] %></td>
-          <td><%= invoice[:price] %></td>
-          <td><%= invoice[:created_at] %></td>
-          <td><%= invoice[:updated_at] %></td>
-          <td class="links">
-            <a href="/<%= request[:controller] %>/<%= invoice[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
-            <a href="/<%= request[:controller] %>/<%= invoice[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
-              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% else %>
-  <center>
-    Hiç Kayıt Bulunamadı
-  </center>
-
-  <div class="form-actions">
-    <center>
-      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
-    </center>
-  </div>
-<% end %>
-
-<a href="/<%= request[:controller] %>/new" class="btn btn-primary">Yeni İlaç Ekle</a>
+    <% end %>
+    <tr>
+      <td>Toplam</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>

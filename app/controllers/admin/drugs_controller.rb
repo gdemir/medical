@@ -23,8 +23,16 @@ class Admin::DrugsController < ApplicationController
       :price => params[:price],
     })
     drug.save
+
+    # ilaç için bir depo açalım
+    drug_storage = DrugStorage.new({
+      :drug_id => drug[:id],
+      :sequence => 0,
+    })
+    drug_storage.save
+
     flash[:success] = "İlaç eklendi"
-    redirect_to "/admin/drugs/#{drug.id}"
+    redirect_to "/admin/drugs/#{drug[:id]}"
   end
 
   def update
@@ -39,11 +47,11 @@ class Admin::DrugsController < ApplicationController
     else
       flash[:error] = "İlaç Güncellenemedi."
     end
-    redirect_to "/admin/drugs/#{drug.id}"
+    redirect_to "/admin/drugs/#{drug[:id]}"
   end
 
   def destroy
-    if Drug.delete(params[:drug_id])
+    if Drug.delete(params[:drug_id]) and DrugStorage.delete(:drug_id => params[:drug_id])
       flash[:success] = "Kayıt Silindi"
     else
       flash[:error] = "Kayıt Silinemedi"

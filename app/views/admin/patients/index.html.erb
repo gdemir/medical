@@ -1,17 +1,46 @@
-<% patients = Patient.all %>
+<%= render :partial => "admin/patients/sort" %>
+<%
+  patients = Patient
+
+  if params[:tc] and !params[:tc].empty?
+    patients = patients.where("tc like ?", "#{params[:tc]}%")
+  end
+
+  if params[:file_no] and !params[:file_no].empty?
+    patients = patients.where("file_no like ?", "#{params[:file_no]}%")
+  end
+
+  if params[:date] and !params[:date].empty?
+    patients = patients.where("birthday like ?", "#{params[:date]}%")
+  end
+
+  if params[:first_name] and !params[:first_name].empty?
+    patients = patients.where("first_name like ?", "#{params[:first_name]}%")
+  end
+
+  if params[:last_name] and !params[:last_name].empty?
+    patients = patients.where("last_name like ?", "#{params[:last_name]}%")
+  end
+
+  unless params[:tc] and params[:file_no] and params[:first_name] and params[:last_name] and params[:date]
+    patients = patients.all
+  else
+    if params[:tc].empty? and params[:file_no].empty? and \
+      params[:first_name].empty? and params[:last_name].empty? and params[:date].empty?
+      patients = patients.all
+    end
+  end
+%>
 
 <% if patients.count > 0 %>
-  <div class="well"><h5>Hastalar</h5></div>
-  <table class="table">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>#</th>
         <th>Tc</th>
-        <th>File no</th>
+        <th>Dosya no</th>
         <th>Ad Soyad</th>
-        <th>Doğum Yeri</th>
-        <th>Eklenen Tarih</th>
-        <th>Güncellenen Tarih</th>
+        <th>Randevu</th>
         <th></th>
       </tr>
     </thead>
@@ -22,9 +51,7 @@
           <td><%= patient[:tc] %></td>
           <td><%= patient[:file_no] %></td>
           <td><%= patient.full_name %></td>
-          <td><%= patient[:birthplace] %></td>
-          <td><%= patient[:created_at] %></td>
-          <td><%= patient[:updated_at] %></td>
+          <td><a href="/admin/consults/<%= patient[:id] %>/patient" rel="tooltip" class="icon-eye-open" title="Randevu"></a></td>
           <td class="links">
             <a href="/<%= request[:controller] %>/<%= patient[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
             <a href="/<%= request[:controller] %>/<%= patient[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"

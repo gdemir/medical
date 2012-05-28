@@ -29,7 +29,10 @@ class Admin::PatientsController < ApplicationController
       :email => params[:email],
       :birthday => params[:birthday],
       :birthplace => params[:birthplace],
-      :insurance => params[:insurance],
+      :blood_group_id => params[:blood_group_id],
+      :adress => params[:adress],
+      :mother_name => params[:mother_name],
+      :father_name => params[:father_name],
     })
 
     flash[:success] = "Hasta eklendi" if patient.save
@@ -43,7 +46,7 @@ class Admin::PatientsController < ApplicationController
       end
     end
 
-    redirect_to "/admin/patients/#{patient.id}"
+    redirect_to "/admin/patients/#{patient[:id]}"
   end
 
   def update
@@ -59,7 +62,10 @@ class Admin::PatientsController < ApplicationController
       :email => params[:email],
       :birthday => params[:birthday],
       :birthplace => params[:birthplace],
-      :insurance => params[:insurance],
+      :blood_group_id => params[:blood_group_id],
+      :adress => params[:adress],
+      :mother_name => params[:mother_name],
+      :father_name => params[:father_name],
     })
 
     if patient.save
@@ -77,12 +83,13 @@ class Admin::PatientsController < ApplicationController
       end
     end
 
-    redirect_to "/admin/patients/#{patient.id}"
+    redirect_to "/admin/patients/#{patient[:id]}"
   end
 
   def destroy
     patient = Patient.find(params[:patient_id])
     Image.delete(patient[:image_url])
+
     if patient.delete
       flash[:success] = "Kayıt Silindi"
     else

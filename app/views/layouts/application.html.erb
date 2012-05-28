@@ -8,36 +8,15 @@
   </head>
   <body>
 
+    <%= render :partial => "layouts/admin_login" %>
     <%= render :partial => "layouts/header" %>
 
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span3">
-          <div class="well" style="padding: 8px 0;">
-            <ul class="nav nav-list">
-              <li class="nav-header">Admin Menü</li>
-              <li class="active"><a href="/admin"><i class="icon-white icon-home"></i> Anasayfa</a></li>
-              <li><a href="#"><i class="icon-book"></i> Kütüphane</a></li>
-              <li><a href="#"><i class="icon-pencil"></i> Uygulamalar</a></li>
-              <li class="nav-header">Another list header</li>
-              <li><a href="/admin/profile"><i class="icon-user"></i> Hesap</a></li>
-              <li><a href="#"><i class="icon-cog"></i> Ayarlar</a></li>
-              <li><a href="/admin/help"><i class="icon-flag"></i> Yardım</a></li>
-            </ul>
-          </div> <!-- /well -->
-        </div><!--/span-->
+    <div class="container">
+      <%= render :partial => "admin/header" %>
+      <%= render :partial => "layouts/notice" %>
 
-        <div class="span9">
-          <div class="row-fluid">
-            <%= render :partial => "admin/header" %>
-            <%= render :partial => "layouts/notice" %>
-
-            <hr>
-            <%= yield %>
-          </div>
-        </div>
-
-      </div><!--/row-->
+      <hr>
+      <%= yield %>
     </div><!-- /container -->
 
     <%= render :partial => "layouts/footer" %>

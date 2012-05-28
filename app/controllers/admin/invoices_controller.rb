@@ -17,15 +17,24 @@ class Admin::InvoicesController < ApplicationController
   end
 
   def create
-    invoice = Invoice.new({
-      :consult_id => params[:consult_id],
-      :product_id => params[:product_id],
-      :product_type => params[:product_type],
-      :price => params[:price],
-    })
-    invoice.save
-    flash[:success] = "Fatura eklendi"
-    redirect_to "/admin/consults/#{invoice.consult_id}"
+    invoice = Invoice.find_by_consult_id_and_product_id_and_product_type(params[:consult_id],
+                                                                         params[:product_id],
+                                                                         params[:product_type])
+    if invoice
+      flash[:error] = "Faturada bu ürün zaten var"
+    else
+      invoice = Invoice.new({
+        :consult_id => params[:consult_id],
+        :product_id => params[:product_id],
+        :product_type => params[:product_type],
+        :price => params[:price],
+        :sequence => params[:sequence],
+      })
+      invoice.save
+
+      flash[:success] = "Faturaya Eklendi"
+    end
+    redirect_to "/admin/consults/#{invoice[:consult_id]}"
   end
 
   def update
@@ -38,16 +47,17 @@ class Admin::InvoicesController < ApplicationController
     else
       flash[:error] = "Fatura Güncellenemedi."
     end
-    redirect_to "/admin/consults/#{invoice.consult_id}"
+    redirect_to "/admin/consults/#{invoice[:consult_id]}"
   end
 
   def destroy
     invoice = Invoice.find(params[:invoice_id])
-    invoice_consult_id = invoice.consult_id
+    invoice_consult_id = invoice[:consult_id]
+
     if invoice.delete
-      flash[:success] = "Kayıt Silindi"
+      flash[:success] = "Kayıt Faturadan Silindi"
     else
-      flash[:error] = "Kayıt Silinemedi"
+      flash[:error] = "Kayıt Faturadan Silinemedi"
     end
     redirect_to "/admin/consults/#{invoice_consult_id}"
   end

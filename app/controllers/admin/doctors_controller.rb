@@ -2,7 +2,7 @@
 class Admin::DoctorsController < ApplicationController
 
   include ApplicationHelper
-  before_filter :require_admin
+  before_filter :require_superadmin
 
   def index
   end

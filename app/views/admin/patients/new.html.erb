@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="control-group">
-      <label class="control-label" for="input02">File no (*)</label>
+      <label class="control-label" for="input02">Dosya no (*)</label>
       <div class="controls">
         <input type="text" class="input-xlarge" id="input02" name="file_no">
       </div>
@@ -65,7 +65,7 @@
     <div class="control-group">
       <label class="control-label" for="input06">Doğum Tarihi (*)</label>
       <div class="controls">
-        <input type="text" class="input-xlarge" id="input06" name="birthday">
+        <input type="text" class="input-xlarge" id="input06" name="birthday" data-datepicker="datepicker">
       </div>
     </div>
     <div class="control-group">
@@ -75,16 +75,27 @@
       </div>
     </div>
     <div class="control-group">
-      <label class="control-label">ssk</label>
+      <label class="control-label" for="input08">Kan Grup (*)</label>
       <div class="controls">
-        <label class="radio">
-          <input type="radio" name="insurance" id="optionsRadios1" value="1" checked>
-          Var
-        </label>
-        <label class="radio">
-          <input type="radio" name="insurance" id="optionsRadios2" value="0">
-          Yok
-        </label>
+        <%= select_tag(:blood_group_id, options_from_collection_for_select(BloodGroup.all, :id, :name)) %>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="input09">Adres (*)</label>
+      <div class="controls">
+        <textarea rows="4" class="input-xlarge" id="input09" name="address"></textarea>
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="input10">Anne Ad (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" id="input10" name="mother_name">
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="input11">Baba Ad (*)</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" id="input11" name="father_name">
       </div>
     </div>
   </fieldset>

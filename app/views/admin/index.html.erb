@@ -1,42 +1,215 @@
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Kayıtlar</th>
-      <th>Sayı</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Yöneticiler</td>
-      <td><%= Admin.count %></td>
-    </tr>
-    <tr>
-      <td>Hastalar</td>
-      <td><%= Patient.count %></td>
-    </tr>
-    <tr>
-      <td>Bölümler</td>
-      <td><%= Department.count %></td>
-    </tr>
-    <tr>
-      <td>Doktorlar</td>
-      <td><%= Doctor.count %></td>
-    </tr>
-    <tr>
-      <td>Testler</td>
-      <td><%= TrialType.count %></td>
-    </tr>
-    <tr>
-      <td>Hasta Test İstekleri</td>
-      <td><%= TrialRequest.count %></td>
-    </tr>
-    <tr>
-      <td>Hasta Başvuruları</td>
-      <td><%= Consult.count %></td>
-    </tr>
-    <tr>
-      <td>İlaçlar</td>
-      <td><%= Drug.count %></td>
-    </tr>
-  </tbody>
-</table>
+<div class="accordion" id="accordion2">
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+        Bugün Randevusu Olan Hastalar
+      </a>
+    </div>
+    <div id="collapseOne" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Ad Soyad</th>
+              <th>Saat</th>
+              <th>Tel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%
+              consults = Consult.where("date like ? ", "#{consult_days[0]}%").group("consults.patient_id")
+              patient_ids = consults.map {|consult| consult.patient_id }
+            %>
+            <% patient_ids.each do |patient_id| %>
+              <% patient = Patient.find(patient_id) %>
+              <% consults = Consult.where("patient_id" => patient.id).where("date like ? ", "#{consult_days[0]}%")%>
+              <tr>
+                <td><%= patient.full_name %></td>
+                <td>
+
+                  <table class="table table-condensed">
+                    <tbody>
+                      <% consults.each do |consult| %>
+                        <tr>
+                          <td><%= consult.hour %></td>
+                          <td><%= consult.doctor.department.name + "/" + consult.doctor.full_name %></td>
+                          <td>
+                            <a class="btn btn-primary" href="/admin/consults/<%= consult[:id] %>">
+                              <i class="icon-eye-open icon-white"></i> Randevu
+                            </a>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+
+                </td>
+                <td><%= patient.phone %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
+        Bugün İlacı Bitecek Olan Hastalar
+      </a>
+    </div>
+    <div id="collapseTwo" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Ad Soyad</th>
+              <th>İlaç</th>
+              <th>Tel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%
+              drug_uses = DrugUse.joins(:consult).where("end_time like ? ", "#{consult_days[0]}%").group("consults.patient_id")
+              patient_ids = drug_uses.map {|drug_use| drug_use.consult.patient_id }
+            %>
+            <% patient_ids.each do |patient_id| %>
+              <% patient = Patient.find(patient_id) %>
+              <% drug_uses = DrugUse.joins(:consult).where("consults.patient_id" => patient.id).where("end_time like ? ", "#{consult_days[0]}%")%>
+              <tr>
+                <td><%= patient.full_name %></td>
+                <td>
+
+                  <table class="table table-condensed">
+                    <tbody>
+                      <% drug_uses.each do |drug_use| %>
+                        <tr>
+                          <td><%= drug_use.drug.name %></td>
+                          <td>
+                            <a class="btn btn-primary" href="/admin/consults/<%= drug_use[:consult_id] %>">
+                              <i class="icon-eye-open icon-white"></i> Bilgi
+                            </a>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+                </td>
+
+                <td><%= patient.phone %></td>
+
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
+        Yarın Randevusu Olan Hastalar
+      </a>
+    </div>
+    <div id="collapseThree" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Ad Soyad</th>
+              <th>Saat</th>
+              <th>Tel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%
+              consults = Consult.where("date like ? ", "#{consult_days[1]}%").group("consults.patient_id")
+              patient_ids = consults.map {|consult| consult.patient_id }
+            %>
+            <% patient_ids.each do |patient_id| %>
+              <% patient = Patient.find(patient_id) %>
+              <% consults = Consult.where("patient_id" => patient.id).where("date like ? ", "#{consult_days[1]}%")%>
+              <tr>
+                <td><%= patient.full_name %></td>
+                <td>
+
+                  <table class="table table-condensed">
+                    <tbody>
+                      <% consults.each do |consult| %>
+                        <tr>
+                          <td><%= consult.hour %></td>
+                          <td><%= consult.doctor.department.name + "/" + consult.doctor.full_name %></td>
+                          <td>
+                            <a class="btn btn-primary" href="/admin/consults/<%= consult[:id] %>">
+                              <i class="icon-eye-open icon-white"></i> Randevu
+                            </a>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+
+                </td>
+                <td><%= patient.phone %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="accordion-group">
+    <div class="accordion-heading">
+      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseFour">
+        Yarın İlacı Bitecek Olan Hastalar
+      </a>
+    </div>
+    <div id="collapseFour" class="accordion-body collapse">
+      <div class="accordion-inner">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Ad Soyad</th>
+              <th>İlaç</th>
+              <th>Tel</th>
+            </tr>
+          </thead>
+          <tbody>
+            <%
+              drug_uses = DrugUse.joins(:consult).where("end_time like ? ", "#{consult_days[1]}%").group("consults.patient_id")
+              patient_ids = drug_uses.map {|drug_use| drug_use.consult.patient_id }
+            %>
+            <% patient_ids.each do |patient_id| %>
+              <tr>
+                <% patient = Patient.find(patient_id) %>
+                <% drug_uses = DrugUse.joins(:consult).where("consults.patient_id" => patient.id).where("end_time like ? ", "#{consult_days[1]}%")%>
+                <td><%= patient.full_name %></td>
+                <td>
+
+                  <table class="table table-condensed">
+                    <tbody>
+                      <% drug_uses.each do |drug_use| %>
+                        <tr>
+                          <td><%= drug_use.drug.name %></td>
+                          <td>
+                            <a class="btn btn-primary" href="/admin/consults/<%= drug_use[:consult_id] %>">
+                              <i class="icon-eye-open icon-white"></i> Bilgi
+                            </a>
+                          </td>
+                        </tr>
+                      <% end %>
+                    </tbody>
+                  </table>
+
+                </td>
+
+                <td><%= patient.phone %></td>
+
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

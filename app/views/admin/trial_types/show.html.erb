@@ -9,10 +9,13 @@
     <% if trial_type = TrialType.find(params[:id]) %>
 
       <% trials = Trial.find_all_by_trial_type_id(trial_type[:id]) %>
-      Ad
+
+      <label class="control-label" for="disabledInput">Ad (*)</label>
       <input type="text" class="input-large disabled" id="disabledInput" value="<%= trial_type[:name] %>" disabled>
-      Fiyat
+
+      <label class="control-label" for="disabledInput">Fiyat (*)</label>
       <input type="text" class="input-large disabled" id="disabledInput" value="<%= trial_type[:price] %>" disabled>
+
       <a href="/<%= request[:controller] %>/<%= trial_type[:id] %>/edit" class="btn btn-primary">Düzenle</a>
       <a href="/<%= request[:controller] %>/<%= trial_type[:id] %>/destroy" class="btn btn-danger"
         onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">Sil</a>

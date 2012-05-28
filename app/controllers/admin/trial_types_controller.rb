@@ -22,8 +22,16 @@ class Admin::TrialTypesController < ApplicationController
       :price => params[:price]
     })
     trial_type.save
+
+    # test için bir depo açalım
+    trial_storage = TrialStorage.new({
+      :trial_type_id => trial_type[:id],
+      :sequence => 0,
+    })
+    trial_storage.save
+
     flash[:success] = "Test Tipi eklendi"
-    redirect_to "/admin/trial_types/#{trial_type.id}"
+    redirect_to "/admin/trial_types/#{trial_type[:id]}"
   end
 
   def update
@@ -37,11 +45,13 @@ class Admin::TrialTypesController < ApplicationController
     else
       flash[:error] = "Test Tipi Güncellenemedi."
     end
-    redirect_to "/admin/trial_types/#{trial_type.id}"
+    redirect_to "/admin/trial_types/#{trial_type[:id]}"
   end
 
   def destroy
-    if TrialType.delete(params[:trial_type_id]) and Trial.delete_all(:trial_type_id => params[:trial_type_id])
+    if TrialType.delete(params[:trial_type_id]) and \
+       Trial.delete_all(:trial_type_id => params[:trial_type_id]) and \
+       TrialStorage.delete_all(:trial_type_id => params[:trial_type_id])
       flash[:success] = "Kayıt Silindi"
     else
       flash[:error] = "Kayıt Silinemedi"

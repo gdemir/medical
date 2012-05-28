@@ -1,6 +1,10 @@
 # encoding: utf-8
 module ApplicationHelper
 
+  def require_patient
+    redirect_to '/home' unless session[:patient]
+  end
+
   def require_admin
     redirect_to '/admin/login' unless session[:admin]
   end

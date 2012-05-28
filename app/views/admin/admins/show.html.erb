@@ -2,7 +2,7 @@
 
   <form class="form-horizontal">
     <fieldset>
-      <legend>Hasta</legend>
+      <legend>Admin</legend>
     <div class="control-group">
       <label class="control-label" for="disabledInput">Ad (*)</label>
       <div class="controls">
@@ -31,15 +31,15 @@
       </div>
     </div>
     <div class="control-group">
-      <label class="control-label">status</label>
+      <label class="control-label">Grup</label>
       <div class="controls">
         <label class="radio">
-          <input type="radio" name="status" id="optionsRadios1" <%= "checked" if admin[:status] %>>
-          1
+          <input type="radio" class="disabled" id="disabledInput" <%= "checked" if admin[:status] == 1 %> disabled>
+          <span class="label label-info">Admin</span>
         </label>
         <label class="radio">
-          <input type="radio" name="status" id="optionsRadios2" <%= "checked" unless admin[:status] %>>
-          0
+          <input type="radio" class="disabled" id="disabledInput" <%= "checked" if admin[:status] == 0 %> disabled>
+          <span class="label label-important">Personel</span>
         </label>
       </div>
     </div>

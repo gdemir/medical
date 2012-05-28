@@ -3,7 +3,7 @@ class Admin::AdminsController < ApplicationController
 
   include ApplicationHelper
   include ImageHelper
-  before_filter :require_admin
+  before_filter :require_superadmin
 
   def index
   end
@@ -71,6 +71,7 @@ class Admin::AdminsController < ApplicationController
   def destroy
     admin = Admin.find(params[:admin_id])
     Image.delete(admin[:image_url])
+
     if admin.delete
       flash[:success] = "Kayıt Silindi"
     else

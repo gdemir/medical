@@ -2,14 +2,12 @@
 
 <% if admins.count > 0 %>
   <div class="well"><h5>Adminler</h5></div>
-  <table class="table">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>#</th>
         <th>Ad Soyad</th>
         <th>Grup</th>
-        <th>Eklenen Tarih</th>
-        <th>Güncellenen Tarih</th>
         <th></th>
       </tr>
     </thead>
@@ -18,9 +16,7 @@
         <tr>
           <td><%= admin[:id] %></td>
           <td><%= admin.full_name %></td>
-          <td><%= admin[:status] %></td>
-          <td><%= admin[:created_at] %></td>
-          <td><%= admin[:updated_at] %></td>
+          <td><%= admin.status_name %></td>
           <td class="links">
             <a href="/<%= request[:controller] %>/<%= admin[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
             <a href="/<%= request[:controller] %>/<%= admin[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"

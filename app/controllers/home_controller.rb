@@ -1,6 +1,9 @@
 # encoding: utf-8
 class HomeController < ApplicationController
 
+  include ApplicationHelper
+  before_filter :require_patient, :only => [:department_query, :consult_destroy]
+
   def index
     session[:patient] = nil
 #    flash[:info] = "Medical Servisimize Hoşgeldiniz!"
@@ -14,20 +17,32 @@ class HomeController < ApplicationController
   end
 
   def department_query
-    session[:department] = Patient.find(params[:department_id]) unless params[:department_id] == ""
-    session[:doctor] = Doctor.find(params[:doctor_id]) unless params[:doctor_id] == ""
+    session[:department] = Patient.find(params[:department_id]) unless params[:department_id].empty?
+    session[:doctor] = Doctor.find(params[:doctor_id]) unless params[:doctor_id].empty?
     redirect_to '/home/consult_register'
   end
 
   def consult_register
     if session[:patient] and session[:department] and session[:doctor] and params[:date]
-      unless Consult.find_by_patient_id_and_doctor_id_and_date(session[:patient][:id],session[:doctor][:id],params[:date])
-         consult = Consult.new({
-           :patient_id => session[:patient][:id],
-           :doctor_id => session[:doctor][:id],
-           :date => params[:date],
-         })
-         consult.save
+      patient = Patient.find(session[:patient][:id])
+      patient_new_consults = patient.new_consults.select do |consult|
+         consult[:doctor_id] == session[:doctor][:id] and \
+         consult[:patient_id] == session[:patient][:id] and consult.day == params[:date].to_datetime.strftime("%d-%m-%Y")
+      end
+
+      if patient_new_consults.empty?
+        unless Consult.find_by_patient_id_and_doctor_id_and_date(session[:patient][:id], session[:doctor][:id], params[:date])
+          consult = Consult.new({
+            :patient_id => session[:patient][:id],
+            :doctor_id => session[:doctor][:id],
+            :date => params[:date],
+          })
+          consult.save
+        else
+          flash[:error] = "Bu zaman dilimi randevulanmıştır. Lütfen başka bir zaman dilimi seçiniz"
+        end
+      else
+        flash[:error] = "Bu doktora bugün içerisinde sadece 1 defa randevu alabilirsiniz"
       end
     end
   end

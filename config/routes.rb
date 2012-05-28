@@ -6,21 +6,20 @@ Medical::Application.routes.draw do
   match "about" => "home#about"
   match "contact" => "home#contact"
 
-  get   "home/index"
-  post  "home/index"
-  get   "home/consult_register"
-  post  "home/consult_register"
-  get   "home/consult_query"
-  post  "home/consult_query"
-  get   "home/patient_query"
-  post  "home/patient_query"
-  get   "home/department_query"
-  post  "home/department_query"
   match "home/consult_destroy" => "home#consult_destroy"
   match "home/consult_destroy/:id/:patient_id" => "home#consult_destroy"
 
-  match "/admin" => "admin#index"
+  namespace :home do
+    get   :index
+    get   :consult_register
+    get   :consult_query
+  end
+  post  "home/consult_register"
+  post  "home/department_query"
+  post  "home/consult_query"
+  post  "home/patient_query"
 
+  match "/admin" => "admin#index"
   namespace :admin do
     get  :login
     get  :logout
@@ -29,6 +28,7 @@ Medical::Application.routes.draw do
     get  :index
     get  :profile
     post :profile_update
+    post :approval
     get  :help
 
     resources :drugs do
@@ -41,20 +41,29 @@ Medical::Application.routes.draw do
     end
     post "departments/update"
 
+    resources :doctors do
+      get :destroy
+    end
+    post "doctors/update"
+
     resources :patients do
       get :destroy
     end
     post "patients/update"
 
+
     match "consults/all" => "consults#all"
+    match "consults/:id/state" => "consults#state"
+    match "consults/:id/payment" => "consults#payment"
+
+    match "consults/:patient_id/patient" => "consults#patient"
+
+    match "consults/:id/drugspdf" => "consults#drugspdf"
+    match "consults/:id/invoicepdf" => "consults#invoicepdf"
+    match "consults/:id/:trial_type_id/trialtypepdf" => "consults#trialtypepdf"
     resources :consults do
       get :destroy
     end
-
-    resources :doctors do
-      get :destroy
-    end
-    post "doctors/update"
 
     resources :trial_types do
       get :destroy
@@ -77,10 +86,35 @@ Medical::Application.routes.draw do
     end
     post "invoices/update"
 
-    resources :trial_results
-    resources :trial_requests
+    resources :drug_uses do
+      get :destroy
+    end
+    post "drug_uses/update"
 
-    resources :people
+    match "trial_requests/all" => "trial_requests#all"
+    match "trial_requests/:id/:state/state" => "trial_requests#state"
+    resources :trial_requests do
+      get :destroy
+    end
+    post "trial_requests/update"
+
+    resources :trial_results do
+    end
+    post "trial_results/update"
+
+    resources :blood_groups do
+      get :destroy
+    end
+    post "blood_groups/update"
+
+    resources :trial_storages do
+    end
+    post "trial_storages/update"
+
+    resources :drug_storages do
+    end
+    post "drug_storages/update"
+
   end
 
   # The priority is based upon order of creation:

@@ -1,16 +1,41 @@
-<% drugs = Drug.all %>
+<%= render :partial => "admin/drugs/sort" %>
+<%
+  drugs = Drug
+
+  if params[:down] and !params[:down].empty?
+    drugs = drugs.where("price >=? ", params[:down])
+  end
+
+  if params[:up] and !params[:up].empty?
+    drugs = drugs.where("price <=? ", params[:up])
+  end
+
+  if params[:date] and !params[:date].empty?
+    drugs = drugs.where("expiry_date like ?", "#{params[:date]}%")
+  end
+
+  if params[:name] and !params[:name].empty?
+    drugs = drugs.where("name like ?", "#{params[:name]}%")
+  end
+
+  unless params[:down] and params[:up] and params[:name] and params[:date]
+    drugs = drugs.all
+  else
+    if params[:down].empty? and params[:up].empty? and params[:name].empty? and params[:date].empty?
+      drugs = drugs.all
+    end
+  end
+%>
 
 <% if drugs.count > 0 %>
-  <div class="well"><h5>İlaçlar</h5></div>
-  <table class="table">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>#</th>
         <th>Ad</th>
-        <th>İçerik</th>
+        <th>Son Kullanma Tarihi</th>
         <th>Fiyat</th>
-        <th>Eklenen Tarih</th>
-        <th>Güncellenen Tarih</th>
+        <th>İçerik</th>
         <th></th>
       </tr>
     </thead>
@@ -19,10 +44,9 @@
         <tr>
           <td><%= drug[:id] %></td>
           <td><%= drug[:name] %></td>
-          <td><%= drug[:content] %></td>
+          <td><%= drug[:expiry_date] %></td>
           <td><%= drug[:price] %></td>
-          <td><%= drug[:created_at] %></td>
-          <td><%= drug[:updated_at] %></td>
+          <td><%= drug[:content] %></td>
           <td class="links">
             <a href="/<%= request[:controller] %>/<%= drug[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
             <a href="/<%= request[:controller] %>/<%= drug[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
