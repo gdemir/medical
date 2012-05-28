@@ -1,0 +1,65 @@
+<%= render :partial => "admin/trial_storages/sort" %>
+<%
+  trial_storages = TrialStorage
+
+  if params[:down] and !params[:down].empty?
+    trial_storages = trial_storages.where("sequence >=? ", params[:down])
+  end
+
+  if params[:up] and !params[:up].empty?
+    trial_storages = trial_storages.where("sequence <=? ", params[:up])
+  end
+
+  if params[:date] and !params[:date].empty?
+    trial_storages = trial_storages.joins(:trial_type).where("trial_types.expiry_date like ?", "#{params[:date]}%")
+  end
+
+  if params[:name] and !params[:name].empty?
+    trial_storages = trial_storages.joins(:trial_type).where("trial_types.name like ?", "#{params[:name]}%")
+  end
+
+  unless params[:down] and params[:up] and params[:name] and params[:date]
+    trial_storages = trial_storages.all
+  else
+    if params[:down].empty? and params[:up].empty? and params[:name].empty? and params[:date].empty?
+      trial_storages = trial_storages.all
+    end
+  end
+%>
+
+<% if trial_storages.count > 0 %>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Ad</th>
+        <th>Adet</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% trial_storages.each do |trial_storage| %>
+        <tr>
+          <td><%= trial_storage[:id] %></td>
+          <td><%= trial_storage.trial_type.name %></td>
+          <td><%= trial_storage[:sequence] %></td>
+          <td class="links">
+            <a href="/<%= request[:controller] %>/<%= trial_storage[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
+            <a href="/<%= request[:controller] %>/<%= trial_storage[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>

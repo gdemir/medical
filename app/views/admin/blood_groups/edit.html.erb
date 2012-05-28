@@ -1,0 +1,25 @@
+<% if blood_group = BloodGroup.find(params[:id]) %>
+
+  <form action="/admin/blood_groups/update" method="post" class="form-horizontal" >
+    <fieldset>
+      <legend>Doktor Düzenle</legend>
+      <div class="control-group">
+        <label class="control-label" for="input01">Ad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input01" name="name" value="<%= blood_group[:name] %>">
+        </div>
+      </div>
+      <input type="hidden" name="id" value="<%= blood_group[:id] %>"><!-- #FIXME -->
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Güncelle</button>
+      <a class="btn" href="/admin/blood_groups">İptal</a>
+    </div>
+</form>
+<% else %>
+  <center>
+    Böyle Bir Kullanıcı Bulunamadı
+  </center>
+<% end %>
+

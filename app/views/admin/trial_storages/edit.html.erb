@@ -1,0 +1,30 @@
+<% if trial_storage = TrialStorage.find(params[:id]) %>
+  <form action="/admin/trial_storages/update" method="post" class="form-horizontal" >
+    <fieldset>
+      <legend>Test Deposu Düzenle</legend>
+      <div class="control-group">
+        <label class="control-label" for="disabledInput">Ad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= trial_storage.trial_type.name %>" disabled>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input01">Adet (*)</label>
+        <div class="controls">
+          <textarea rows="4" class="input-xlarge" id="input01" name="sequence"><%= trial_storage[:sequence] %></textarea>
+        </div>
+      </div>
+      <input type="hidden" name="id" value="<%= trial_storage[:id] %>"><!-- #FIXME -->
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Güncelle</button>
+      <a class="btn" href="/admin/trial_storages">İptal</a>
+    </div>
+  </form>
+<% else %>
+  <center>
+    Böyle Bir Kullanıcı Bulunamadı
+  </center>
+<% end %>
+

@@ -1,0 +1,19 @@
+<%= form_tag({:action => 'sign_in', :controller => '/admin'}, :method => 'post', :class => "form-horizontal") do %>
+  <fieldset>
+    <div class="control-group">
+      <label class="control-label" for="input01">Kullanıcı Adı</label>
+      <div class="controls">
+        <input type="text" class="input-xlarge" id="input01" name="first_name">
+      </div>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="input02">Parola</label>
+      <div class="controls">
+        <input type="password" class="input-xlarge" id="input02" name="password">
+      </div>
+    </div>
+  </fieldset>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Giriş Yap</button>
+  </div>
+<% end %>

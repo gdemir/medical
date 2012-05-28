@@ -1,0 +1,38 @@
+<% blood_groups = BloodGroup.all %>
+
+<% if blood_groups.count > 0 %>
+  <div class="well"><h5>Kan Grupları</h5></div>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Ad</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% blood_groups.each do |blood_group| %>
+        <tr>
+          <td><%= blood_group[:id] %></td>
+          <td><%= blood_group[:name] %></td>
+          <td class="links">
+            <a href="/<%= request[:controller] %>/<%= blood_group[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
+            <a href="/<%= request[:controller] %>/<%= blood_group[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>
+
+<a href="/<%= request[:controller] %>/new" class="btn btn-primary">Yeni Doktor Ekle</a>

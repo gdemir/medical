@@ -1,0 +1,111 @@
+<%= render :partial => "admin/trial_requests/sort" %>
+<%
+  trial_requests = TrialRequest
+
+  doctor_ids = if params[:department_id] and !params[:department_id].empty?
+                 if params[:doctor_id] and !params[:doctor_id].empty?
+                   params[:doctor_id]
+                 else
+                   Department.find(params[:department_id]).doctor.select(:id)
+                 end
+               else
+                 Doctor.select(:id).all
+               end
+  if doctor_ids
+    trial_requests = trial_requests.joins(:consult).where("consults.doctor_id" => doctor_ids)
+  end
+
+  if params[:name] and !params[:name].empty?
+    trial_requests = trial_requests.joins(:trial_type).where("trial_types.name like ?", "#{params[:name]}%")
+  end
+
+  if params[:state] and !params[:state].empty?
+    params[:state] = true if params[:state] == "true"
+    params[:state] = false if params[:state] == "false"
+    trial_requests = trial_requests.where("state" => params[:state])
+  end
+
+  if params[:tc] and !params[:tc].empty?
+    consults = Consult.joins(:patient).where("patients.tc like ?", "#{params[:tc]}%")
+    trial_requests = trial_requests.where("consult_id" => consults)
+  end
+
+  if params[:first_name] and !params[:first_name].empty?
+    consults = Consult.joins(:patient).where("patients.first_name like ?", "#{params[:first_name]}%")
+    trial_requests = trial_requests.where("consult_id" => consults)
+  end
+
+  if params[:last_name] and !params[:last_name].empty?
+    consults = Consult.joins(:patient).where("patients.last_name like ?", "#{params[:last_name]}%")
+    trial_requests = trial_requests.where("consult_id" => consults)
+  end
+
+  if params[:date] and !params[:date].empty?
+    trial_requests = trial_requests.joins(:consult).where("trial_requests.created_at like ?", "#{params[:date]}%")
+  else
+    trial_requests = trial_requests.joins(:consult).where("trial_requests.created_at >=? ", consult_days[0]).where("trial_requests.created_at <=? ", consult_days[1])
+  end
+%>
+
+<% if trial_requests.count > 0 %>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Test Tipi</th>
+        <th>Tc</th>
+        <th>Ad</th>
+        <th>Soyad</th>
+        <th>Bölüm</th>
+        <th>Doktor</th>
+        <th>İstek</th>
+        <th>Cevap</th>
+        <th>Tarih</th>
+        <th>Durum</th>
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% trial_requests.each do |trial_request| %>
+        <tr>
+          <td><%= trial_request[:id] %></td>
+          <td><%= trial_request.trial_type.name %></td>
+          <td><%= trial_request.consult.patient.tc %></td>
+          <td><%= trial_request.consult.patient.first_name %></td>
+          <td><%= trial_request.consult.patient.last_name %></td>
+          <td><%= trial_request.consult.doctor.department.name %></td>
+          <td><%= trial_request.consult.doctor.full_name %></td>
+          <td><% if admin = Admin.find_by_id(trial_request[:request_admin_id]) %><%= admin.full_name %><% end %></td>
+          <td><% if admin = Admin.find_by_id(trial_request[:reply_admin_id]) %><%= admin.full_name %><% end %></td>
+          <td><%= trial_request[:created_at].to_date %></td>
+          <td>
+            <% if trial_request[:state] %><span class="label label-success"><i class="icon-check icon-white"></i></span>
+            <% else %><span class="label label-info"><i class="icon-share icon-white"></i></span>
+            <% end %>
+          </td>
+          <td class="links">
+            <a class="icon-random" href="/admin/consults/<%= trial_request[:consult_id]%>" title="Başvuru"></a>
+            <a class="icon-print"
+              href="/admin/consults/<%= "#{trial_request[:consult_id]}/#{trial_request[:trial_type_id]}" %>/trialtypepdf"
+              title="Sonuçlar">
+            </a>
+            <a href="/<%= request[:controller] %>/<%= trial_request[:id] %>" rel="tooltip" class="icon-retweet" title="Cevapla"></a>
+            <a href="/<%= request[:controller] %>/<%= trial_request[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>

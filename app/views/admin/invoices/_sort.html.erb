@@ -1,0 +1,47 @@
+<section id="#">
+<div class="page-header">
+  <h1>Fatura Bilgileri <small>(<%= File.basename request.path %>)</small></h1>
+</div>
+<div class="row">
+  <div class="span3 columns">
+    <h3>Hakkında</h3>
+    <p>Sisteme kayıtlı olan faturaların ürün, adet ve gelir bilgileridir.</p>
+  </div>
+  <div class="span9 columns">
+    <h2>Sıralama</h2>
+
+    <form action="<%= request.path %>" method="get" class="form-inline" >
+      <div class="span9">
+        <p>Sıralama işlemini aşağıdaki kutuları kullanarak yapabilirsiniz.</p>
+
+        <ul class="thumbnails">
+
+          <li class="span2.5">
+          <div class="thumbnail caption">
+            <h5>Başlangıç Tarih</h5>
+
+            <input class="input-small" type="text" name="start_date" data-datepicker="datepicker"
+            value="<%= params[:start_date] if params[:start_date] %>" onchange='this.form.submit()'>
+
+          </div>
+          </li>
+
+          <li class="span2.5">
+          <div class="thumbnail caption">
+            <h5>Son Tarih</h5>
+
+            <input class="input-small" type="text" name="end_date" data-datepicker="datepicker"
+            value="<%= params[:end_date] if params[:end_date] %>" onchange='this.form.submit()'>
+
+          </div>
+          </li>
+
+        </ul>
+      </div>
+    </form>
+
+  </div>
+</div>
+<br />
+
+</section>

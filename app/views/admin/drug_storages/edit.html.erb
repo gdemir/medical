@@ -1,0 +1,36 @@
+<% if drug_storage = DrugStorage.find(params[:id]) %>
+  <form action="/admin/drug_storages/update" method="post" class="form-horizontal" >
+    <fieldset>
+      <legend>İlaç Depo Düzenle</legend>
+      <div class="control-group">
+        <label class="control-label" for="disabledInput">Ad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= drug_storage.drug.name %>" disabled>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="disabledInput">S.K.T (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= drug_storage.drug.expiry_date %>" disabled>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input01">Adet (*)</label>
+        <div class="controls">
+          <textarea rows="4" class="input-xlarge" id="input01" name="sequence"><%= drug_storage[:sequence] %></textarea>
+        </div>
+      </div>
+      <input type="hidden" name="id" value="<%= drug_storage[:id] %>"><!-- #FIXME -->
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Güncelle</button>
+      <a class="btn" href="/admin/drug_storages">İptal</a>
+    </div>
+  </form>
+<% else %>
+  <center>
+    Böyle Bir Kullanıcı Bulunamadı
+  </center>
+<% end %>
+

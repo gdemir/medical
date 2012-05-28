@@ -1,0 +1,67 @@
+<%= render :partial => "admin/drug_storages/sort" %>
+<%
+  drug_storages = DrugStorage
+
+  if params[:down] and !params[:down].empty?
+    drug_storages = drug_storages.where("sequence >=? ", params[:down])
+  end
+
+  if params[:up] and !params[:up].empty?
+    drug_storages = drug_storages.where("sequence <=? ", params[:up])
+  end
+
+  if params[:date] and !params[:date].empty?
+    drug_storages = drug_storages.joins(:drug).where("drugs.expiry_date like ?", "#{params[:date]}%")
+  end
+
+  if params[:name] and !params[:name].empty?
+    drug_storages = drug_storages.joins(:drug).where("drugs.name like ?", "#{params[:name]}%")
+  end
+
+  unless params[:down] and params[:up] and params[:name] and params[:date]
+    drug_storages = drug_storages.all
+  else
+    if params[:down].empty? and params[:up].empty? and params[:name].empty? and params[:date].empty?
+      drug_storages = drug_storages.all
+    end
+  end
+%>
+
+<% if drug_storages.count > 0 %>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Ad</th>
+        <th>Adet</th>
+        <th>Son Kullanma Tarih</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% drug_storages.each do |drug_storage| %>
+        <tr>
+          <td><%= drug_storage[:id] %></td>
+          <td><%= drug_storage.drug.name %></td>
+          <td><%= drug_storage[:sequence] %></td>
+          <td><%= drug_storage.drug.expiry_date %></td>
+          <td class="links">
+            <a href="/<%= request[:controller] %>/<%= drug_storage[:id] %>" rel="tooltip" class="icon-info-sign" title="Göster"></a>
+            <a href="/<%= request[:controller] %>/<%= drug_storage[:id] %>/destroy" rel="tooltip" class="icon-trash" title="Sil"
+              onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')"></a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>

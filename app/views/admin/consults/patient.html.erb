@@ -1,0 +1,41 @@
+<% if patient = Patient.find(params[:patient_id]) %>
+  <h2>Hasta Geçmiş</h2>
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>Bölüm</th>
+        <th>Doktor</th>
+        <th>Tarih</th>
+        <th>Saat</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% patient.consults.each do |patient_consult| %>
+        <tr>
+          <td><%= patient_consult.doctor.department.name %></td>
+          <td><%= patient_consult.doctor.full_name %></td>
+          <td><%= patient_consult.day %></td>
+          <td><%= patient_consult.hour %></td>
+          <td>
+            <a class="btn btn-primary" href="/admin/consults/<%= patient_consult[:id] %>">
+              <i class="icon-eye-open icon-white"></i> İncele
+            </a>
+            <a class="btn btn-primary" href="/admin/consults/<%= patient_consult[:id] %>/invoicepdf">
+              <i class="icon-print icon-white"></i> Fatura
+            </a>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <center>
+    Hiç Kayıt Bulunamadı
+  </center>
+  <div class="form-actions">
+    <center>
+      <a href="/admin" class="btn btn-primary">Ana Sayfaya Dön</a>
+    </center>
+  </div>
+<% end %>

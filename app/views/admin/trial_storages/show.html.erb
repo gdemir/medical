@@ -1,0 +1,30 @@
+<% if trial_storage = TrialStorage.find(params[:id]) %>
+
+  <form class="form-horizontal">
+    <fieldset>
+      <legend>Test Deposu</legend>
+      <div class="control-group">
+        <label class="control-label" for="disabledInput">Ad (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= trial_storage.trial_type.name %>" disabled>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="disabledInput">Adet (*)</label>
+        <div class="controls">
+          <textarea rows="4" class="input-xlarge disabled" id="disabledInput" disabled><%= trial_storage[:sequence] %></textarea>
+        </div>
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <a href="/<%= request[:controller] %>/<%= trial_storage[:id] %>/edit" class="btn btn-primary">Düzenle</a>
+      <a href="/<%= request[:controller] %>/<%= trial_storage[:id] %>/destroy" class="btn btn-danger"
+      onclick="return confirm('Bu kaydı gerçekten silmek istiyor musunuz?')">Sil</a>
+    </div>
+  </form>
+<% else %>
+  <center>
+    Böyle Bir İlaç Bulunamadı
+  </center>
+<% end %>

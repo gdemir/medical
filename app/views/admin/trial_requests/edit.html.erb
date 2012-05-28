@@ -1,0 +1,108 @@
+<section id="#">
+<div class="page-header">
+  <h1>Test Tipi <small>(edit)</small></h1>
+</div>
+<div class="row">
+  <div class="span3 columns">
+    <h3>Test Tipi</h3>
+    <p>
+    <% if trial_request = TrialRequest.find(params[:id]) %>
+
+      <% trial_results = TrialResult.find_all_by_trial_request_id(trial_request[:id]) %>
+
+      <form action="/admin/trial_requests/update" method="post" class="">
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="input01">Ad (*)</label>
+            <div class="controls">
+              <input type="text" class="input-large" id="input01" name="name" value="<%= trial_request.trial_type.name %>" disabled>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="disabledInput">İstek</label>
+            <div class="controls">
+              <% if admin = Admin.find_by_id(trial_request[:request_admin_id]) %>
+                <input type="text" class="input-large disabled" id="disabledInput" value="<%= admin.full_name %>" disabled>
+              <% end %>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="disabledInput">Cevap</label>
+            <div class="controls">
+              <% if admin = Admin.find_by_id(trial_request[:reply_admin_id]) %>
+                <input type="text" class="input-large disabled" id="disabledInput" value="<%= admin.full_name %>" disabled>
+              <% end %>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="disabledInput">Durum</label>
+            <div class="controls">
+              <% if trial_request[:state] %><span class="label label-success"><i class="icon-check icon-white"></i> Onaylı</span>
+              <% else %><span class="label label-info"><i class="icon-share icon-white"></i> Taslak</span>
+              <% end %>
+            </div>
+          </div>
+          <input type="hidden" name="id" value="<%= trial_request[:id] %>"><!-- #FIXME -->
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-success">
+            <i class="icon-ok icon-white"></i> Kaydet
+          </button>
+          <a class="btn" href="/admin/trial_requests/<%= trial_request[:id] %>">İptal</a>
+        </div>
+      </form>
+    <% else %>
+      <center>
+        Böyle Bir Kullanıcı Bulunamadı
+      </center>
+    <% end %>
+    </p>
+  </div>
+  <div class="span9 columns">
+    <h2>Testler</h2>
+
+    <% if trial_results.count > 0 %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ad</th>
+            <th>Min Range</th>
+            <th>Result</th>
+            <th>Max Range</th>
+            <th>Units</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% trial_results.each do |trial_result| %>
+
+            <form action="/admin/trial_results/update" method="post" class="">
+
+              <tr>
+                <td><%= trial_result[:id] %></td>
+                <td><input type="text" class="input-medium" name="name" value="<%= trial_result.trial.name %>" disabled></td>
+                <td><input type="text" class="input-mini" name="min_range" value="<%= trial_result[:min_range] %>"></td>
+                <td><input type="text" class="input-mini" name="result" value="<%= trial_result[:result] %>"></td>
+                <td><input type="text" class="input-mini" name="max_range" value="<%= trial_result[:max_range] %>"></td>
+                <td><input type="text" class="input-mini" name="units" value="<%= trial_result.trial.units %>" disabled></td>
+                <td class="links">
+                  <button type="submit" class="btn btn-primary"><i class="icon-refresh icon-white"></i> Güncelle</button>
+                </td>
+              </tr>
+
+              <input type="hidden" name="id" value="<%= trial_result[:id] %>"><!-- #FIXME -->
+            </form>
+
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <center>
+        Hiç Test Bulunamadı
+      </center>
+    <% end %>
+  </div>
+</div>
+</section>

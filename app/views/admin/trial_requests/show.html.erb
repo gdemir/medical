@@ -1,0 +1,119 @@
+<section id="#">
+<div class="page-header">
+  <h1>Test Tipi <small>(reply)</small></h1>
+</div>
+<div class="row">
+  <div class="span3 columns">
+    <h3>Test Tipi</h3>
+    <p>
+    <% if trial_request = TrialRequest.find(params[:id]) %>
+
+      <% trial_results = TrialResult.find_all_by_trial_request_id(trial_request[:id]) %>
+
+      <form action="/admin/trial_types/update" method="post" class="">
+
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="disabledInput">Ad</label>
+            <div class="controls">
+              <input type="text" class="input-large disabled" id="disabledInput" value="<%= trial_request.trial_type.name %>" disabled>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="disabledInput">İstek</label>
+            <div class="controls">
+              <% if admin = Admin.find_by_id(trial_request[:request_admin_id]) %>
+                <input type="text" class="input-large disabled" id="disabledInput" value="<%= admin.full_name %>" disabled>
+              <% end %>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="disabledInput">Cevap</label>
+            <div class="controls">
+              <% if admin = Admin.find_by_id(trial_request[:reply_admin_id]) %>
+                <input type="text" class="input-large disabled" id="disabledInput" value="<%= admin.full_name %>" disabled>
+              <% end %>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="disabledInput">Durum</label>
+            <div class="controls">
+              <% if trial_request[:state] %><span class="label label-success"><i class="icon-check icon-white"></i> Onaylı</span>
+              <% else %><span class="label label-info"><i class="icon-share icon-white"></i> Taslak</span>
+              <% end %>
+            </div>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <a href="/<%= request[:controller] %>/<%= trial_request[:id] %>/edit" class="btn btn-primary"
+            onclick="return confirm('Bu test isteğini cevaplamak istiyor musunuz?')">
+            <i class="icon-pencil icon-white"></i> Düzenle
+          </a>
+          <a href="/<%= request[:controller] %>/<%= trial_request[:id] %>/destroy" class="btn btn-danger"
+            onclick="return confirm('Bu test isteğini gerçekten silmek istiyor musunuz?')">
+            <i class="icon-trash icon-white"></i> Sil</a>
+          </p>
+        </div>
+
+      </form>
+    <% else %>
+      <center>
+        Böyle Bir Test Bulunamadı
+      </center>
+    <% end %>
+  </div>
+  <div class="span9 columns">
+    <h2>Testler</h2>
+
+    <div class="pull-right">
+      <a class="btn btn-primary"  href="/admin/consults/<%= trial_request[:consult_id]%>" title="Başvuru">
+        <i class="icon-random icon-white"></i> Başvuru
+      </a>
+      <a class="btn btn-primary" href="/admin/trial_requests/<%= trial_request[:id] %>/0/state"
+        onclick="return confirm('Bu test isteğini taslak şeklinde değiştirmek istiyor musunuz?')">
+        <i class="icon-share icon-white"></i> Taslak
+      </a>
+      <a class="btn btn-success" href="/admin/trial_requests/<%= trial_request[:id] %>/1/state"
+        onclick="return confirm('Bu test isteğini cevaplandı şeklinde değiştirmek istiyor musunuz?')">
+        <i class="icon-check icon-white"></i> Gönder
+      </a>
+    </div>
+
+    <% if trial_results.count > 0 %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ad</th>
+            <th>Min Range</th>
+            <th>Result</th>
+            <th>Max Range</th>
+            <th>Units</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% trial_results.each do |trial_result| %>
+          <tr>
+            <td><%= trial_result[:id] %></td>
+            <td><input type="text" class="input-large disabled" id="disabledInput" value="<%= trial_result.trial.name %>" disabled></td>
+            <td><input type="text" class="input-mini disabled" id="disabledInput" value="<%= trial_result[:min_range] %>" disabled></td>
+            <td><input type="text" class="input-mini disabled" id="disabledInput" value="<%= trial_result[:result] %>" disabled></td>
+            <td><input type="text" class="input-mini disabled" id="disabledInput" value="<%= trial_result[:max_range] %>" disabled></td>
+            <td><input type="text" class="input-mini disabled" id="disabledInput" value="<%= trial_result.trial.units %>" disabled></td>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% else %>
+      <center>
+        Hiç Test Bulunamadı
+      </center>
+
+      <center>
+        <a href="/admin/trials/<%= trial_request.trial_type_id %>/new" class="btn btn-primary">Yeni Test Ekle</a>
+      </center>
+    <% end %>
+  </div>
+</div>
+</section>

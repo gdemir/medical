@@ -1,0 +1,74 @@
+<section id="#">
+<div class="page-header">
+  <h1>Hastalar <small>(<%= File.basename request.path %>)</small></h1>
+</div>
+<div class="row">
+  <div class="span3 columns">
+    <h3>Hakkında</h3>
+    <p>Sisteme kayıtlı olan hastalardır.</p>
+  </div>
+  <div class="span9 columns">
+    <h2>Sıralama</h2>
+
+    <form action="<%= request.path %>" method="get" class="form-inline" >
+      <div class="span9">
+        <h2>More examples</h2>
+        <p>Explore all your options with the various grid classes available to you. You can also mix and match different sizes.</p>
+
+        <ul class="thumbnails">
+
+          <li class="span3">
+          <div class="thumbnail caption">
+
+            <h5>Tc</h5>
+
+            <input type="text" class="input-xlarge" id="input01" name="tc" onchange='this.form.submit()'>
+            <select class="input-medium" name="tc" onchange='this.form.submit()'>
+              <option value=""></option>
+              <% Department.all.each do |department| %>
+                <option value="<%= department[:id] %>" <%= 'selected' if department[:id] == params[:tc].to_i %>>
+                <%= department[:name] %>
+                </option>
+              <% end %>
+            </select>
+
+          </div>
+          </li>
+
+          <li class="span3">
+          <div class="thumbnail caption">
+            <h5>Dosya No</h5>
+
+            <select class="input-medium" name="doctor_id" onchange='this.form.submit()'>
+              <option value=""></option>
+              <% if params[:tc] %>
+                <% Doctor.find_all_by_tc(params[:tc]).each do |doctor| %>
+                  <option value="<%= doctor[:id] %>" <%= 'selected' if doctor[:id] == params[:doctor_id].to_i %>>
+                  <%= doctor.full_name %>
+                  </option>
+                <% end %>
+              <% end %>
+            </select>
+
+          </div>
+          </li>
+
+          <li class="span3">
+          <div class="thumbnail caption">
+            <h5>Doğum Tarihi</h5>
+
+            <input class="input-medium" type="text" name="date" data-datepicker="datepicker"
+            value="<%= params[:date] if params[:date] %>" onchange='this.form.submit()'>
+
+          </div>
+          </li>
+
+        </ul>
+      </div>
+    </form>
+
+  </div>
+</div>
+<br />
+
+</section>
