@@ -53,7 +53,7 @@ class Admin::DrugsController < ApplicationController
   end
 
   def destroy
-    if Drug.delete(params[:drug_id]) and DrugStorage.delete(:drug_id => params[:drug_id])
+    if Drug.delete(params[:drug_id]) and DrugStorage.delete_all(:drug_id => params[:drug_id])
       flash[:success] = "Kayıt Silindi"
     else
       flash[:error] = "Kayıt Silinemedi"
