@@ -59,7 +59,7 @@ class Admin::DrugsController < ApplicationController
       end
     end
     
-    redirect_to "/admin/drugs/#{drug[:id]}"
+    redirect_to "/admin/drugs/#{params[:id]}"
   end
 
   def destroy
