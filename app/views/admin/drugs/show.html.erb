@@ -10,6 +10,12 @@
         </div>
       </div>
       <div class="control-group">
+        <label class="control-label" for="disabledInput">Doğum Tarihi (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge disabled" id="disabledInput" value="<%= drug[:expiry_date] %>" disabled>
+        </div>
+      </div>
+      <div class="control-group">
         <label class="control-label" for="disabledInput">İçerik (*)</label>
         <div class="controls">
           <textarea rows="3" class="input-xlarge disabled" id="disabledInput" disabled><%= drug[:content] %></textarea>
