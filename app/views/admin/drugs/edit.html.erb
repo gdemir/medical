@@ -9,15 +9,22 @@
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="input02">İçerik (*)</label>
+        <label class="control-label" for="input02">Son Kullanma Tarihi (*)</label>
         <div class="controls">
-          <textarea rows="3" class="input-xlarge" id="input02" name="content"><%= drug[:content] %></textarea>
+          <input type="text" class="input-xlarge" id="input02" name="expiry_date"
+          data-datepicker="datepicker" value="<%= drug[:expiry_date] %>">
         </div>
       </div>
       <div class="control-group">
-        <label class="control-label" for="input03">Fiyat (*)</label>
+        <label class="control-label" for="input03">İçerik (*)</label>
         <div class="controls">
-          <input type="text" class="input-xlarge" id="input03" name="price" value="<%= drug[:price] %>">
+          <textarea rows="3" class="input-xlarge" id="input03" name="content"><%= drug[:content] %></textarea>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input04">Fiyat (*)</label>
+        <div class="controls">
+          <input type="text" class="input-xlarge" id="input04" name="price" value="<%= drug[:price] %>">
         </div>
       </div>
       <input type="hidden" name="id" value="<%= drug[:id] %>"><!-- #FIXME -->
