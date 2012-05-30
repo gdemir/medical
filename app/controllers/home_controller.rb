@@ -13,7 +13,7 @@ class HomeController < ApplicationController
     session[:department] = nil
     session[:doctor] = nil
     session[:patient] = Patient.find_by_tc_and_birthday_and_birthplace(params[:tc], params[:birthday], params[:birthplace])
-    unless session[:patient] and !session[:patient].empty?
+    unless session[:patient]
       flash[:error] = "Sisteme kayıtlı böyle bir hasta bulunmamaktadır."
     end
     redirect_to (params[:before_place] == "0") ? '/home/consult_register' : '/home/consult_query'
