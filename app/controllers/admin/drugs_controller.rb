@@ -17,22 +17,28 @@ class Admin::DrugsController < ApplicationController
   end
 
   def create
-    drug = Drug.new({
-      :name => params[:name],
-      :expiry_date => params[:expiry_date],
-      :content => params[:content],
-      :price => params[:price],
-    })
-    drug.save
+    if params[:expiry_date].to_date < Date.today
+      flash[:error] = "İlacın son kullanma tarihi bugünden önce olamaz"
+      return redirect_to "/admin/drugs/new"
+    else
+      drug = Drug.new({
+        :name => params[:name],
+        :expiry_date => params[:expiry_date],
+        :content => params[:content],
+        :price => params[:price],
+      })
+      drug.save
+    
 
-    # ilaç için bir depo açalım
-    drug_storage = DrugStorage.new({
-      :drug_id => drug[:id],
-      :sequence => 0,
-    })
-    drug_storage.save
+      # ilaç için bir depo açalım
+      drug_storage = DrugStorage.new({
+        :drug_id => drug[:id],
+        :sequence => 0,
+      })
+      drug_storage.save
 
-    flash[:success] = "İlaç eklendi"
+      flash[:success] = "İlaç eklendi"
+    end
     redirect_to "/admin/drugs/#{drug[:id]}"
   end
 
