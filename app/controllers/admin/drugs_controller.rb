@@ -43,18 +43,22 @@ class Admin::DrugsController < ApplicationController
   end
 
   def update
-    drug = Drug.update(params[:id], {
-      :name => params[:name],
-      :expiry_date => params[:expiry_date],
-      :content => params[:content],
-      :price => params[:price],
-    })
-
-    if drug.save
-      flash[:success] = "İlaç Güncellenmiştir."
+    if params[:expiry_date].to_date < Date.today
+      flash[:error] = "İlacın son kullanma tarihi bugünden önce olamaz"
     else
-      flash[:error] = "İlaç Güncellenemedi."
+      drug = Drug.update(params[:id], {
+        :name => params[:name],
+        :expiry_date => params[:expiry_date],
+        :content => params[:content],
+        :price => params[:price],
+      })
+      if drug.save
+        flash[:success] = "İlaç Güncellenmiştir."
+      else
+        flash[:error] = "İlaç Güncellenemedi."
+      end
     end
+    
     redirect_to "/admin/drugs/#{drug[:id]}"
   end
 
