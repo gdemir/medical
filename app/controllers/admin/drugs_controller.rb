@@ -19,6 +19,7 @@ class Admin::DrugsController < ApplicationController
   def create
     drug = Drug.new({
       :name => params[:name],
+      :expiry_date => params[:expiry_date],
       :content => params[:content],
       :price => params[:price],
     })
@@ -38,6 +39,7 @@ class Admin::DrugsController < ApplicationController
   def update
     drug = Drug.update(params[:id], {
       :name => params[:name],
+      :expiry_date => params[:expiry_date],
       :content => params[:content],
       :price => params[:price],
     })
